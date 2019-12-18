@@ -21,7 +21,7 @@
 #include <time.h>
 #include <getopt.h>
 
-#define SCRIPT_VERSION "v1.0.0-beta-6, Dec 17, 2019"
+#define SCRIPT_VERSION "v1.0.0-beta-8, Dec 17, 2019"
 
 #ifndef COMMIT_HASH
 #define COMMIT_HASH "unknown"
@@ -34,7 +34,8 @@ void help_menu(const char* script_name) {
   printf("  %s [option] <file...>\n", script_name);
   printf("\n");
   printf("Options:\n");
-  printf("  -h, --help         print help menu\n");
+  printf("  -c, --cache        print the cache (comming soon)\n");
+  printf("  -f, --force        remove with force\n");
   printf("  -C, --commit       print the github commit\n");
   printf("  -V, --version      print version\n");
   printf("\n");
@@ -162,6 +163,19 @@ char* gen_cachedir(const char* to_trash) {
 
   strcat(srm_file, "/");
   strcat(srm_file, to_trash);
+
+  struct stat st;
+
+  for (int i = 1; i < 20; i++) {
+    if (stat(srm_file, &st) == 0) {
+      char b[10];
+      b[0] = '\0';
+      sprintf(b, ".%d", i);
+      strcat(srm_file, b);
+    } else {
+      break;
+    }
+  }
 
   return(srm_file);
 }
