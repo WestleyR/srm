@@ -21,11 +21,13 @@
 #include <time.h>
 #include <getopt.h>
 
-#define SCRIPT_VERSION "v1.0.0-beta-2, Dec 17, 2019"
+#define SCRIPT_VERSION "v1.0.0-beta-4, Dec 17, 2019"
 
 #ifndef COMMIT_HASH
 #define COMMIT_HASH "unknown"
 #endif
+
+int force_flag = 0;
 
 void help_menu(const char* script_name) {
   printf("Usage:\n");
@@ -165,6 +167,20 @@ char* gen_cachedir(const char* to_trash) {
 }
 
 int srm(const char* file) {
+  struct stat st;
+
+  if (stat(file, &st) != 0) {
+    fprintf(stderr, "%s: No such file or directory\n", file);
+    return(1);
+  }
+
+  if (S_ISREG(st.st_mode) == 0) {
+    if (force_flag == 0) {
+      fprintf(stderr, "%s: is a directory\n", file);
+      return(1);
+    }
+  }
+
   char* trash_dir = gen_cachedir(file);
   if (trash_dir == NULL) {
     fprintf(stderr, "Failed to make trash dir\n");
@@ -195,16 +211,20 @@ int main(int argc, char** argv) {
 
   static struct option long_options[] = {
     {"help", no_argument, 0, 'h'},
+    {"force", no_argument, 0, 'f'},
     {"cache", no_argument, 0, 'c'},
     {"version", no_argument, 0, 'V'},
     {"commit", no_argument, 0, 'C'},
     {NULL, 0, 0, 0}
   };
 
-  while ((opt = getopt_long(argc, argv,"cVhC", long_options, 0)) != -1) {
+  while ((opt = getopt_long(argc, argv,"cfVhC", long_options, 0)) != -1) {
     switch (opt) {
       case 'c':
         list_srm_cache = 1;
+        break;
+      case 'f':
+        force_flag = 1;
         break;
       case 'h':
         help_menu(argv[0]);
@@ -231,7 +251,9 @@ int main(int argc, char** argv) {
 
   if (optind < argc) {
     for (int i = optind; i < argc; i++) {
+#ifdef DEBUG
       printf("Removing: %s\n", argv[i]);
+#endif
       srm(argv[i]);
     }
   } else {
