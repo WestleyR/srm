@@ -21,7 +21,7 @@
 #include <time.h>
 #include <getopt.h>
 
-#define SCRIPT_VERSION "v1.1.0-beta-1, Dec 18, 2019"
+#define SCRIPT_VERSION "v1.1.0, Dec 18, 2019"
 
 #ifndef COMMIT_HASH
 #define COMMIT_HASH "unknown"
