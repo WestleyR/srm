@@ -1,7 +1,7 @@
 // created by: WestleyR
 // email: westleyr@nym.hush.com
 // https://github.com/WestleyR/srm
-// date: Dec 17, 2019
+// date: Dec 18, 2019
 // version-1.0.0
 //
 // The Clear BSD License
@@ -21,21 +21,26 @@
 #include <time.h>
 #include <getopt.h>
 
-#define SCRIPT_VERSION "v1.0.0, Dec 17, 2019"
+#define SCRIPT_VERSION "v1.1.0-beta-1, Dec 18, 2019"
 
 #ifndef COMMIT_HASH
 #define COMMIT_HASH "unknown"
 #endif
 
 int force_flag = 0;
+int recursive_flag = 0;
 
 void help_menu(const char* script_name) {
+  printf("Copyright (c) 2019 WestleyR, All rights reserved.\n");
+  printf("This software is licensed under a Clear BSD License.\n");
+  printf("\n");
   printf("Usage:\n");
   printf("  %s [option] <file...>\n", script_name);
   printf("\n");
   printf("Options:\n");
   printf("  -c, --cache        print the cache (comming soon)\n");
   printf("  -f, --force        remove with force\n");
+  printf("  -r, --recursive    remove a directory\n");
   printf("  -C, --commit       print the github commit\n");
   printf("  -V, --version      print version\n");
   printf("\n");
@@ -69,6 +74,52 @@ char* get_srm_cachedir() {
   return(cache_path);
 }
 
+int mkdir_all(const char *dirs) {
+  int dirs_len = strlen(dirs);
+
+#ifdef DEBUG
+  printf("DEBUG: max dir len: %d\n", dirs_len);
+#endif
+
+  char dir_path[dirs_len+1];
+  char *p = NULL;
+  struct stat st;
+
+  strcpy(dir_path, dirs);
+
+  if (dir_path[dirs_len - 1] == '/') {
+    dir_path[dirs_len - 1] = '\0';
+  }
+
+  for (p = dir_path + 1; *p != '\0'; p++) {
+    if (*p == '/') {
+      *p = '\0';
+#ifdef DEBUG
+      printf("Creating: %s\n", dir_path);
+#endif
+      if (stat(dir_path, &st) == -1) {
+        if (mkdir(dir_path, 0700) != 0) {
+          fprintf(stderr, "Failed to create: %s\n", dir_path);
+          return(1);
+        }
+      }
+      *p = '/';
+    }
+  }
+
+#ifdef DEBUG
+  printf("Creating: %s\n", dir_path);
+#endif
+  if (stat(dir_path, &st) == -1) {
+    if (mkdir(dir_path, 0700) != 0) {
+      fprintf(stderr, "Failed to create: %s\n", dir_path);
+      return(1);
+    }
+  }
+
+  return(0);
+}
+
 int init_cache() {
   char* cache_path = get_srm_cachedir();
   if (cache_path == NULL) {
@@ -78,48 +129,13 @@ int init_cache() {
   struct stat st;
 
   if (stat(cache_path, &st) == -1) {
-    if (mkdir(cache_path, 0700) != 0) {
+    if (mkdir_all(cache_path) != 0) {
       fprintf(stderr, "Failed to create: %s\n", cache_path);
       return(1);
     }
   }
 
   free(cache_path);
-
-  return(0);
-}
-
-int mkdir_all(const char *dir) {
-  char tmp[256];
-  char *p = NULL;
-  size_t len;
-  struct stat st;
-
-  strcpy(tmp, dir);
-  len = strlen(tmp);
-
-  if (tmp[len - 1] == '/') {
-    tmp[len - 1] = '\0';
-  }
-  for (p = tmp + 1; *p; p++) {
-    if (*p == '/') {
-      *p = 0;
-      if (stat(tmp, &st) == -1) {
-        if (mkdir(tmp, 0700) != 0) {
-          fprintf(stderr, "Failed to create: %s\n", tmp);
-          return(1);
-        }
-      }
-      *p = '/';
-    }
-  }
-
-  if (stat(tmp, &st) == -1) {
-    if (mkdir(tmp, 0700) != 0) {
-      fprintf(stderr, "Failed to create: %s\n", tmp);
-      return(1);
-    }
-  }
 
   return(0);
 }
@@ -136,7 +152,7 @@ char* gen_cachedir(const char* to_trash) {
   }
 
   current_date[0] = '\0';
-  sprintf(current_date, "Y%d/M%d/D%d_H%d-M%d-S%d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+  sprintf(current_date, "Y%d/M%d/D%d/H%d-M%d-S%d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
   char* srm_file;
   srm_file = (char*) malloc(256 * sizeof(char));
@@ -189,12 +205,11 @@ int srm(const char* file) {
   }
 
   if (S_ISREG(st.st_mode) == 0) {
-    if (force_flag == 0) {
+    if (recursive_flag == 0) {
       fprintf(stderr, "%s: is a directory\n", file);
       return(1);
     }
   }
-
 
   if (access(file, R_OK) != 0) {
     if (force_flag == 0) {
@@ -236,16 +251,20 @@ int main(int argc, char** argv) {
   static struct option long_options[] = {
     {"help", no_argument, 0, 'h'},
     {"force", no_argument, 0, 'f'},
+    {"recursive", no_argument, 0, 'r'},
     {"cache", no_argument, 0, 'c'},
     {"version", no_argument, 0, 'V'},
     {"commit", no_argument, 0, 'C'},
     {NULL, 0, 0, 0}
   };
 
-  while ((opt = getopt_long(argc, argv,"cfVhC", long_options, 0)) != -1) {
+  while ((opt = getopt_long(argc, argv,"crfVhC", long_options, 0)) != -1) {
     switch (opt) {
       case 'c':
         list_srm_cache = 1;
+        break;
+      case 'r':
+        recursive_flag = 1;
         break;
       case 'f':
         force_flag = 1;
