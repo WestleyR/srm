@@ -21,7 +21,7 @@
 #include <time.h>
 #include <getopt.h>
 
-#define SCRIPT_VERSION "v1.0.0-beta-8, Dec 17, 2019"
+#define SCRIPT_VERSION "v1.0.0, Dec 17, 2019"
 
 #ifndef COMMIT_HASH
 #define COMMIT_HASH "unknown"
@@ -209,7 +209,9 @@ int srm(const char* file) {
     return(1);
   }
 
+#ifdef DEBUG
   printf("TRASH DIR+FILE: %s\n", trash_dir);
+#endif
 
   if (rename(file, trash_dir) != 0) {
     fprintf(stderr, "Failed to move file: %s\n", file);
