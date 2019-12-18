@@ -21,7 +21,7 @@
 #include <time.h>
 #include <getopt.h>
 
-#define SCRIPT_VERSION "v1.0.0-beta-1, Dec 17, 2019"
+#define SCRIPT_VERSION "v1.0.0-beta-2, Dec 17, 2019"
 
 #ifndef COMMIT_HASH
 #define COMMIT_HASH "unknown"
@@ -151,15 +151,15 @@ char* gen_cachedir(const char* to_trash) {
   strcpy(srm_file, file_cache);
   strcat(srm_file, "/");
   strcat(srm_file, current_date);
-  strcat(srm_file, "/");
-  strcat(srm_file, to_trash);
-
   free(current_date);
   free(file_cache);
 
   if (mkdir_all(srm_file) != 0) {
     return(NULL);
   }
+
+  strcat(srm_file, "/");
+  strcat(srm_file, to_trash);
 
   return(srm_file);
 }
@@ -183,7 +183,6 @@ int srm(const char* file) {
 
   return(0);
 }
-
 
 int main(int argc, char** argv) {
   if (init_cache() != 0) {
@@ -242,6 +241,5 @@ int main(int argc, char** argv) {
 
   return(0);
 }
-
 
 // vim: tabstop=2 shiftwidth=2 expandtab autoindent softtabstop=0
