@@ -21,7 +21,7 @@
 #include <time.h>
 #include <getopt.h>
 
-#define SCRIPT_VERSION "v1.0.0-beta-4, Dec 17, 2019"
+#define SCRIPT_VERSION "v1.0.0-beta-6, Dec 17, 2019"
 
 #ifndef COMMIT_HASH
 #define COMMIT_HASH "unknown"
@@ -181,6 +181,14 @@ int srm(const char* file) {
     }
   }
 
+
+  if (access(file, R_OK) != 0) {
+    if (force_flag == 0) {
+      fprintf(stderr, "%s: is write-protected file\n", file);
+      return(1);
+    }
+  }
+
   char* trash_dir = gen_cachedir(file);
   if (trash_dir == NULL) {
     fprintf(stderr, "Failed to make trash dir\n");
@@ -249,19 +257,23 @@ int main(int argc, char** argv) {
     return(0);
   }
 
+  int success = 0;
+
   if (optind < argc) {
     for (int i = optind; i < argc; i++) {
 #ifdef DEBUG
       printf("Removing: %s\n", argv[i]);
 #endif
-      srm(argv[i]);
+      if (srm(argv[i]) != 0) {
+        success = 1;
+      }
     }
   } else {
     printf("Nothing to do...\n");
     return(1);
   }
 
-  return(0);
+  return(success);
 }
 
 // vim: tabstop=2 shiftwidth=2 expandtab autoindent softtabstop=0
