@@ -1,8 +1,8 @@
 // created by: WestleyR
 // email: westleyr@nym.hush.com
 // https://github.com/WestleyR/srm
-// date: Dec 18, 2019
-// version-1.0.0
+// date: Dec 22, 2019
+// version-1.1.1
 //
 // The Clear BSD License
 //
@@ -19,9 +19,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <time.h>
+#include <libgen.h>
 #include <getopt.h>
 
-#define SCRIPT_VERSION "v1.1.0, Dec 18, 2019"
+#define SCRIPT_VERSION "v1.1.1, Dec 22, 2019"
 
 #ifndef COMMIT_HASH
 #define COMMIT_HASH "unknown"
@@ -177,8 +178,10 @@ char* gen_cachedir(const char* to_trash) {
     return(NULL);
   }
 
+  char *trash_name = basename(strdup(to_trash));
+
   strcat(srm_file, "/");
-  strcat(srm_file, to_trash);
+  strcat(srm_file, trash_name);
 
   struct stat st;
 
