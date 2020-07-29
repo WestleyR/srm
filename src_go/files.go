@@ -19,6 +19,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+
+	"golang.org/x/sys/unix"
 )
 
 type srmOptions struct {
@@ -44,6 +46,24 @@ func isPathADirectory(path string) bool {
 	return false
 }
 
+func checkIfFileIsWriteProtected(file string) bool {
+	return unix.Access(file, unix.W_OK) == nil
+}
+
+func checkForWriteProtectedFileIn(path string) error {
+	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !checkIfFileIsWriteProtected(path) {
+			return fmt.Errorf("%s: is write protected", path)
+		}
+		return nil
+	})
+
+	return err
+}
+
 func srmFile(filePath string, options srmOptions) error {
 	trashPath := getFileTrashPath(filepath.Base(filePath))
 
@@ -52,6 +72,13 @@ func srmFile(filePath string, options srmOptions) error {
 
 		if !options.recursive {
 			return fmt.Errorf("%s: is a directory", filePath)
+		}
+
+		if !options.force {
+			err := checkForWriteProtectedFileIn(filePath)
+			if err != nil {
+				return err
+			}
 		}
 
 		// Move the file to srm trash
