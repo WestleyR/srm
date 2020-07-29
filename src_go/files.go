@@ -89,6 +89,12 @@ func srmFile(filePath string, options srmOptions) error {
 	} else {
 		// Its a plain file
 
+		if !options.force {
+      if !checkIfFileIsWriteProtected(filePath) {
+  			return fmt.Errorf("%s: is write protected", filePath)
+      }
+    }
+
 		// Move the file to srm trash
 		err := os.Rename(filePath, trashPath)
 		if err != nil {

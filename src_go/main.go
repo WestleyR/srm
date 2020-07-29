@@ -1,7 +1,7 @@
 // Created by: WestleyR
 // Email: westleyr@nym.hush.com
 // Url: https://github.com/WestleyR/srm
-// Last modified date: 2020-07-28
+// Last modified date: 2020-07-29
 //
 // This file is licensed under the terms of
 //
@@ -27,8 +27,8 @@ func main() {
 
 	verbose_flag := flag.BoolP("verbose", "v", false, "Be more verbose.")
 	debug_flag := flag.BoolP("debug", "d", false, "Show debug information.")
-	recursive_flag := flag.BoolP("recursive", "r", false, "Be recursive, remove a directory")
-	force_flag := flag.BoolP("force", "f", false, "Be forceful")
+	recursive_flag := flag.BoolP("recursive", "r", false, "Be recursive, remove a directory.")
+	force_flag := flag.BoolP("force", "f", false, "Remove a write-protected file")
 
 	flag.Parse()
 	args := flag.Args()
