@@ -21,6 +21,14 @@ import (
 	"path/filepath"
 )
 
+type srmOptions struct {
+	force     bool
+	recursive bool
+
+	// filePath not currently used
+	filePath string
+}
+
 func isPathADirectory(path string) bool {
 	fi, err := os.Stat(path)
 	if err != nil {
@@ -36,11 +44,16 @@ func isPathADirectory(path string) bool {
 	return false
 }
 
-func srmFile(filePath string) error {
+func srmFile(filePath string, options srmOptions) error {
 	trashPath := getFileTrashPath(filepath.Base(filePath))
 
 	if isPathADirectory(filePath) {
-		// Copy the directory
+		// Is a directory
+
+		if !options.recursive {
+			return fmt.Errorf("%s: is a directory", filePath)
+		}
+
 		err := CopyDir(filePath, trashPath)
 		if err != nil {
 			return err

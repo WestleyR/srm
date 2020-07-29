@@ -59,10 +59,7 @@ func getCachePath() string {
 }
 
 func init_cache() {
-	fmt.Println("Initting cache dir...")
-
 	cachePath := getCachePath()
-	fmt.Println(cachePath)
 
 	err := os.MkdirAll(cachePath, 0700)
 	if err != nil {

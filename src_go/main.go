@@ -17,7 +17,7 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"os"
 
 	flag "github.com/spf13/pflag"
 )
@@ -25,10 +25,9 @@ import (
 func main() {
 	init_cache()
 
-	// TODO: fix ty0s
 	verbose_flag := flag.BoolP("verbose", "v", false, "Be more verbose.")
 	debug_flag := flag.BoolP("debug", "d", false, "Show debug infomation.")
-	recursve_flag := flag.BoolP("recursve", "r", false, "Be recurs... remove a directory")
+	recursive_flag := flag.BoolP("recursive", "r", false, "Be recursive, remove a directory")
 	force_flag := flag.BoolP("force", "f", false, "Be forceful")
 
 	flag.Parse()
@@ -37,13 +36,28 @@ func main() {
 	set_debug(*debug_flag)
 	print_debugf("THIS IS A DEBUG TEST")
 
-	fmt.Printf("v=%t r=%t f=%t, args: %v\n", *verbose_flag, *recursve_flag, *force_flag, args)
+	_ = *verbose_flag
+
+	// If there are no files, then show the help menu and exit 1
+	if len(args) == 0 {
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	var options srmOptions
+	options.force = *force_flag
+	options.recursive = *recursive_flag
+
+	exitCode := 0
 
 	for _, f := range args {
-		fmt.Printf("Removing file: %v...\n", f)
-		err := srmFile(f)
+		err := srmFile(f, options)
 		if err != nil {
-			log.Printf("ERROR: failed to remove: %s\n", f)
+			// Error should be already formatted
+			fmt.Fprintf(os.Stderr, "%s\n", err)
+			exitCode = 1
 		}
 	}
+
+	os.Exit(exitCode)
 }
