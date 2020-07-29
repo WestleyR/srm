@@ -50,7 +50,7 @@ package: $(SRC)
 ifeq (, $(shell which gox))
 $(error "gox not installed; run: go get github.com...")
 endif
-	./package.sh TARGET_VERSION=$(TARGET_VERSION)
+	TARGET_VERSION=$(TARGET_VERSION) ./package.sh
 
 clean:
 	 rm -f $(TARGET)

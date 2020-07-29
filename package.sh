@@ -16,6 +16,8 @@
 
 set -e
 
+echo "Target version: ${TARGET_VERSION}"
+
 mkdir -p binaries
 cd binaries
 mkdir -p x86_64_linux/${TARGET_VERSION}/bin

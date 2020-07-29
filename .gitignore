@@ -1,4 +1,5 @@
 /srm
 *.o
 /binaries
+.DS_Store
 
