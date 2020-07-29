@@ -46,7 +46,7 @@ func srmFile(filePath string) error {
 			return err
 		}
 
-		err = os.Remove(filePath)
+		err = os.RemoveAll(filePath)
 		if err != nil {
 			return err
 		}
