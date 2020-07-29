@@ -26,7 +26,7 @@ func main() {
 	init_cache()
 
 	verbose_flag := flag.BoolP("verbose", "v", false, "Be more verbose.")
-	debug_flag := flag.BoolP("debug", "d", false, "Show debug infomation.")
+	debug_flag := flag.BoolP("debug", "d", false, "Show debug information.")
 	recursive_flag := flag.BoolP("recursive", "r", false, "Be recursive, remove a directory")
 	force_flag := flag.BoolP("force", "f", false, "Be forceful")
 
