@@ -17,6 +17,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+
 	flag "github.com/spf13/pflag"
 )
 
@@ -36,4 +38,12 @@ func main() {
 	print_debugf("THIS IS A DEBUG TEST")
 
 	fmt.Printf("v=%t r=%t f=%t, args: %v\n", *verbose_flag, *recursve_flag, *force_flag, args)
+
+	for _, f := range args {
+		fmt.Printf("Removing file: %v...\n", f)
+		err := srmFile(f)
+		if err != nil {
+			log.Printf("ERROR: failed to remove: %s\n", f)
+		}
+	}
 }
