@@ -36,7 +36,7 @@ all: $(TARGET)
 
 .PHONY:
 $(TARGET): $(SRC)
-	$(GO) build -o $(TARGET)
+	$(GO) build
 	
 .PHONY:
 test: $(TARGET)

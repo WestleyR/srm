@@ -22,9 +22,17 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
+const srmVersion = "v2.0.0.a1, July 29, 2020"
+
+func showVersion() {
+  fmt.Printf("%s\n", srmVersion)
+}
+
 func main() {
 	init_cache()
 
+	help_flag := flag.BoolP("help", "h", false, "Show help output.")
+	version_flag := flag.BoolP("version", "V", false, "Show srm version.")
 	verbose_flag := flag.BoolP("verbose", "v", false, "Be more verbose.")
 	debug_flag := flag.BoolP("debug", "d", false, "Show debug information.")
 	recursive_flag := flag.BoolP("recursive", "r", false, "Be recursive, remove a directory.")
@@ -37,6 +45,16 @@ func main() {
 	print_debugf("THIS IS A DEBUG TEST")
 
 	_ = *verbose_flag
+
+  if *help_flag {
+    flag.Usage()
+    os.Exit(0)
+  }
+
+  if *version_flag {
+    showVersion()
+    os.Exit(0)
+  }
 
 	// If there are no files, then show the help menu and exit 1
 	if len(args) == 0 {
