@@ -74,7 +74,12 @@ func main() {
 
   // Recover file flag
   if *recover_file_flag != -1 {
-    fmt.Println("Revovering file...")
+    err := recoverFileFromTrashIndex(*recover_file_flag)
+    if err != nil {
+      fmt.Fprintf(os.Stderr, "%s\n", err)
+      os.Exit(1)
+    }
+
     os.Exit(0)
   }
 
