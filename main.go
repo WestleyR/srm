@@ -36,7 +36,10 @@ func main() {
 	verbose_flag := flag.BoolP("verbose", "v", false, "Be more verbose.")
 	debug_flag := flag.BoolP("debug", "d", false, "Show debug information.")
 	recursive_flag := flag.BoolP("recursive", "r", false, "Be recursive, remove a directory.")
-	force_flag := flag.BoolP("force", "f", false, "Remove a write-protected file")
+	force_flag := flag.BoolP("force", "f", false, "Remove a write-protected file.")
+	list_cache_flag := flag.BoolP("list-cache", "l", false, "List recent removed files.")
+	list_all_cache_flag := flag.BoolP("list-all-cache", "a", false, "List all cached files.")
+  recover_file_flag := flag.IntP("recover", "s", -1, "Recover a removed file from the index list-cache.")
 
 	flag.Parse()
 	args := flag.Args()
@@ -46,13 +49,32 @@ func main() {
 
 	_ = *verbose_flag
 
+  // Help flag
   if *help_flag {
     flag.Usage()
     os.Exit(0)
   }
 
+  // Version flag
   if *version_flag {
     showVersion()
+    os.Exit(0)
+  }
+
+  // List cache flag
+  if *list_cache_flag {
+    listRecentCache()
+    os.Exit(0)
+  }
+
+  // List all cache flag
+  if *list_all_cache_flag {
+    os.Exit(0)
+  }
+
+  // Recover file flag
+  if *recover_file_flag != -1 {
+    fmt.Println("Revovering file...")
     os.Exit(0)
   }
 
@@ -62,6 +84,7 @@ func main() {
 		os.Exit(1)
 	}
 
+  // If not doing anything else, then remove the files passed
 	var options srmOptions
 	options.force = *force_flag
 	options.recursive = *recursive_flag

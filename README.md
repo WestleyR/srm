@@ -20,7 +20,7 @@ Or install the Go dev code: _beta_
 
 ```
 git clone https://github.com/WestleyR/srm
-cd srm/src_go
+cd srm/
 make
 sudo make install  # Or without root: make install PREFIX=${HOME}/.local
 ```
