@@ -3,15 +3,22 @@
 This is a `rm` command imitation, but without actrally removing anything, only
 caching it. By doing this, you can recover accidentally-removed files.
 
-<br>
+_undo/list command still WIP..._
 
 ## Install
 
-Install by cloning the source code:
+Install via package manager ([gpack](https://github.com/WestleyR/gpack)):
+
+```
+gpack install WestleyR/srm
+echo "alias rm=\"srm\"" >> ~/.bashrc  # or ~/.bash_profile
+```
+
+Install the Go dev code:
 
 ```
 git clone https://github.com/WestleyR/srm
-cd srm/
+cd srm/src_go
 make
 sudo make install  # Or without root: make install PREFIX=${HOME}/.local
 ```
@@ -22,13 +29,9 @@ Optional, but recommended
 alias rm="srm"
 ```
 
-<br>
-
 ### Examples
 
 Nothing much to show, its just a rm command.
-
-<br>
 
 ## License
 
