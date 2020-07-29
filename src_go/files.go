@@ -54,23 +54,16 @@ func srmFile(filePath string, options srmOptions) error {
 			return fmt.Errorf("%s: is a directory", filePath)
 		}
 
-		err := CopyDir(filePath, trashPath)
-		if err != nil {
-			return err
-		}
-
-		err = os.RemoveAll(filePath)
+		// Move the file to srm trash
+		err := os.Rename(filePath, trashPath)
 		if err != nil {
 			return err
 		}
 	} else {
 		// Its a plain file
-		err := CopyFile(filePath, trashPath)
-		if err != nil {
-			return err
-		}
 
-		err = os.Remove(filePath)
+		// Move the file to srm trash
+		err := os.Rename(filePath, trashPath)
 		if err != nil {
 			return err
 		}
