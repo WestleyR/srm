@@ -37,14 +37,27 @@ func recoverFileFromTrashIndex(trashIndex int) error {
     return fmt.Errorf("no files at index: %d", trashIndex)
   }
   
-  fullTrashFile := filepath.Join(trashPath, files[0].Name())
+  fileName := files[0].Name()
+  fullTrashFile := filepath.Join(trashPath, fileName)
 
-  err = os.Rename(fullTrashFile, files[0].Name())
+  // Check to see if it already exists
+  // Only try 10 times
+  tmpName := fileName
+  for i := 1; i < 11; i++ {
+    if _, err := os.Stat(tmpName); err == nil {
+      tmpName = fileName + "." + strconv.Itoa(i)
+    } else {
+      fileName = tmpName
+      break
+    }
+  }
+
+  err = os.Rename(fullTrashFile, fileName)
   if err != nil {
   	return err
   }
 
-  fmt.Printf("File %s has been recovered to the current directory\n", files[0].Name())
+  fmt.Printf("File %s has been recovered to the current directory as: %s\n", files[0].Name(), fileName)
 
   return nil
 }
