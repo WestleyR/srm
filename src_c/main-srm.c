@@ -1,12 +1,13 @@
-// created by: WestleyR
-// email: westleyr@nym.hush.com
-// https://github.com/WestleyR/srm
-// date: Dec 22, 2019
-// version-1.1.1
+// Created by: WestleyR
+// Email: westleyr@nym.hush.com
+// Url: https://github.com/WestleyR/srm
+// Last modified date: 2020-07-28
+//
+// This file is licensed under the terms of
 //
 // The Clear BSD License
 //
-// Copyright (c) 2019 WestleyR
+// Copyright (c) 2019-2020 WestleyR
 // All rights reserved.
 //
 // This software is licensed under a Clear BSD License.
@@ -22,7 +23,7 @@
 #include <libgen.h>
 #include <getopt.h>
 
-#define SCRIPT_VERSION "v1.1.1, Dec 22, 2019"
+#define SCRIPT_VERSION "v1.2.0, July 28, 2020"
 
 #ifndef COMMIT_HASH
 #define COMMIT_HASH "unknown"
@@ -32,9 +33,6 @@ int force_flag = 0;
 int recursive_flag = 0;
 
 void help_menu(const char* script_name) {
-  printf("Copyright (c) 2019 WestleyR, All rights reserved.\n");
-  printf("This software is licensed under a Clear BSD License.\n");
-  printf("\n");
   printf("Usage:\n");
   printf("  %s [option] <file...>\n", script_name);
   printf("\n");
@@ -209,14 +207,14 @@ int srm(const char* file) {
 
   if (S_ISREG(st.st_mode) == 0) {
     if (recursive_flag == 0) {
-      fprintf(stderr, "%s: is a directory\n", file);
+      fprintf(stderr, "%s: Is a directory (add -r flag to remove it)\n", file);
       return(1);
     }
   }
 
   if (access(file, R_OK) != 0) {
     if (force_flag == 0) {
-      fprintf(stderr, "%s: is write-protected file\n", file);
+      fprintf(stderr, "%s: Is write-protected file (add -f flag to remove it)\n", file);
       return(1);
     }
   }
@@ -230,6 +228,7 @@ int srm(const char* file) {
 #ifdef DEBUG
   printf("TRASH DIR+FILE: %s\n", trash_dir);
 #endif
+
 
   if (rename(file, trash_dir) != 0) {
     fprintf(stderr, "Failed to move file: %s\n", file);

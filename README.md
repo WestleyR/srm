@@ -35,7 +35,7 @@ Nothing much to show, its just a rm command.
 ```
 The Clear BSD License
 
-Copyright (c) 2019 WestleyR
+Copyright (c) 2019-2020 WestleyR
 All rights reserved.
 ```
 

@@ -1,12 +1,13 @@
 # Created by: WestleyR
-# email: westleyr@nym.hush.com
-# Date: Dec 17, 2019
-# https://github.com/WestleyR/srm
-# Version-1.0.0
+# Email: westleyr@nym.hush.com
+# Url: https://github.com/WestleyR/srm
+# Last modified date: 2020-07-28
+#
+# This file is licensed under the terms of
 #
 # The Clear BSD License
 #
-# Copyright (c) 2019 WestleyR
+# Copyright (c) 2019-2020 WestleyR
 # All rights reserved.
 #
 # This software is licensed under a Clear BSD License.
@@ -18,9 +19,12 @@ TARGET = srm
 
 PREFIX = /usr/local
 
+MODDED = $(shell if command -v git > /dev/null ; then (git diff --exit-code --quiet && echo \"[No changes]\") || echo \"[With uncommited changes]\" ; else echo \"[unknown]\" ; fi)
+
 COMMIT = "$(shell git log -1 --oneline --decorate=short --no-color || ( echo 'ERROR: unable to get commit hash' >&2 ; echo unknown ) )"
 
 CFLAGS += -DCOMMIT_HASH=\"$(COMMIT)\"
+CFLAGS += -DUNCOMMITED_CHANGES=\"$(MODDED)\"
 
 ifeq ($(DEBUG), true)
 	CFLAGS += -DDEBUG
@@ -30,7 +34,7 @@ ifeq ($(STATIC), true)
 	CFLAGS += -static
 endif
 
-SRC = $(wildcard src/*.c)
+SRC = $(wildcard ./*.c)
 
 OBJS = $(SRC:.c=.o)
 
