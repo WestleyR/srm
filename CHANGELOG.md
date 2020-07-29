@@ -1,4 +1,20 @@
-# CHANGELOG
+# CHANGELOG for srm
+
+_**NOTES:**_
+ 1. Versions containing "alpha", "a", "beta", "b", or "rc" are pre-releases, and
+subject to change.
+
+## v2.0.0.a1 - July 29, 2020
+
+### ADDED
+ - Added `--list-cache` option
+ - Added `--recover` option to recover deleted files
+
+### CHANGED
+ - Changed code from C to Go
+
+### FIXED
+ - Now checks all files in a dir for write-protected files
 
 ## v1.1.1 - Dec 22, 2019
 
