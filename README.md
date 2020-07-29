@@ -1,7 +1,8 @@
 # Safe Re-Move (`rm`) command with cache/undo
 
 This is a `rm` command imitation, but without actrally removing anything, only
-caching it. By doing this, you can recover accidentally-removed files.
+moving it into cache (`~/.cache/srm`). By doing this, you can recover
+accidentally-removed files.
 
 _undo/list command still WIP..._
 
@@ -12,9 +13,10 @@ Install via package manager ([gpack](https://github.com/WestleyR/gpack)):
 ```
 gpack install WestleyR/srm
 echo "alias rm=\"srm\"" >> ~/.bashrc  # or ~/.bash_profile
+. ~/.bashrc  # or ~/.bash_profile
 ```
 
-Install the Go dev code:
+Or install the Go dev code: _beta_
 
 ```
 git clone https://github.com/WestleyR/srm
@@ -23,7 +25,7 @@ make
 sudo make install  # Or without root: make install PREFIX=${HOME}/.local
 ```
 
-Optional, but recommended
+Optional, but recommended to add this to your `~/.bashrc` or `~/.bash_profile`:
 
 ```
 alias rm="srm"
