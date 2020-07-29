@@ -17,11 +17,24 @@ package main
 
 import (
   "fmt"
-//  "os"
+  "os"
   "io/ioutil"
   "path/filepath"
   "strconv"
 )
+
+func getFileDate(path string) string {
+  fileDate := ""
+  finfo, err := os.Stat(path)
+  if err != nil {
+    fileDate = "[unknown]"
+    return fileDate
+  }
+
+  fileDate = finfo.ModTime().Format("2006-01-02 15:04:05")
+
+  return fileDate
+}
 
 func listRecentCache() error {
   path := getCachePath()
@@ -41,7 +54,8 @@ func listRecentCache() error {
       if (len(files) != 0) {
         trashName = files[0].Name()
       }
-      fmt.Printf("%d: %s/%s\n", i, trashPath, trashName)
+      fileDate := getFileDate(trashPath)
+      fmt.Printf("%d: (%s) %s/%s\n", i, fileDate, trashPath, trashName)
     }
   }
 
