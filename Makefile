@@ -53,7 +53,8 @@ endif
 	TARGET_VERSION=$(TARGET_VERSION) ./package.sh
 
 clean:
-	 rm -f $(TARGET)
+	rm -f $(TARGET)
+	rm -rf binaries
 
 uninstall: $(PREFIX)/$(TARGET)
 	rm -f $(PREFIX)/$(TARGET)

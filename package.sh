@@ -20,25 +20,29 @@ echo "Target version: ${TARGET_VERSION}"
 
 mkdir -p binaries
 cd binaries
-mkdir -p x86_64_linux/${TARGET_VERSION}/bin
-mkdir -p macos/${TARGET_VERSION}/bin
-mkdir -p armv6l/${TARGET_VERSION}/bin
+mkdir -p x86_64_linux/srm/${TARGET_VERSION}/bin
+mkdir -p macos/srm/${TARGET_VERSION}/bin
+mkdir -p armv6l/srm/${TARGET_VERSION}/bin
 
 gox -osarch="linux/amd64 darwin/amd64 linux/arm" ../
 
-mv srm_linux_amd64 x86_64_linux/${TARGET_VERSION}/bin
-mv srm_linux_arm armv6l/${TARGET_VERSION}/bin
-mv srm_darwin_amd64 macos/${TARGET_VERSION}/bin
+mv srm_linux_amd64 x86_64_linux/srm/${TARGET_VERSION}/bin/srm
+mv srm_linux_arm armv6l/srm/${TARGET_VERSION}/bin/srm
+mv srm_darwin_amd64 macos/srm/${TARGET_VERSION}/bin/srm
 
-tar -czf srm-v${TARGET_VERSION}-x86_64_linux.tar.gz x86_64_linux
-tar -czf srm-v${TARGET_VERSION}-macos.tar.gz macos
-tar -czf srm-v${TARGET_VERSION}-armv6l.tar.gz armv6l
+cd x86_64_linux
+tar -czf srm-v${TARGET_VERSION}-x86_64_linux.tar.gz srm
+cd ../macos
+tar -czf srm-v${TARGET_VERSION}-macos.tar.gz srm
+cd ../armv6l
+tar -czf srm-v${TARGET_VERSION}-armv6l.tar.gz srm
+cd ../
 
 mkdir -p dist
 
-mv srm-v${TARGET_VERSION}-x86_64_linux.tar.gz dist
-mv srm-v${TARGET_VERSION}-macos.tar.gz dist
-mv srm-v${TARGET_VERSION}-armv6l.tar.gz dist
+mv x86_64_linux/srm-v${TARGET_VERSION}-x86_64_linux.tar.gz dist
+mv macos/srm-v${TARGET_VERSION}-macos.tar.gz dist
+mv armv6l/srm-v${TARGET_VERSION}-armv6l.tar.gz dist
 
 cd dist
 
