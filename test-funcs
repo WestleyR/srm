@@ -1,0 +1,64 @@
+# Created by: WestleyR
+# Email: westleyr@nym.hush.com
+# Url: https://github.com/WestleyR/srm
+# Last modified date: 2020-07-30
+#
+# This file is licensed under the terms of
+#
+# The Clear BSD License
+#
+# Copyright (c) 2020 WestleyR
+# All rights reserved.
+#
+# This software is licensed under a Clear BSD License.
+#
+
+# usage:
+# run-test <test-name> <test-command> <expect-to-contain-output> <also-expect-to-contain> <expect-exit-code>
+#
+run-test() {
+test_name=$1
+test_cmd=$2
+expect_contain_out=$3
+also_expect_contain_out=$4
+expect_exit_code=$5
+
+green='\033[0;32m'
+red='\033[0;31m'
+creset='\033[0m'
+
+echo -n "Running: ${test_name} ... "
+
+output=`/bin/sh -c "$test_cmd" 2>&1`
+exit_code=$?
+if [ $exit_code -ne $expect_exit_code ]; then
+    echo -e "${red}FAIL${creset} "
+    echo "expecting exit code: ${expect_exit_code}, got ${exit_code}"
+    echo "while running: ${test_cmd}"
+    echo "out: ${output}"
+    exit 1
+fi
+
+line_output=`echo "$output" | grep "$expect_contain_out"`
+if [[ -n $expect_contain_out ]]; then
+    if [[ ! -n $line_output ]]; then
+        echo -e "${red}FAIL${creset} "
+        echo "expected outout to contain: ${expect_contain_out}, got: ${output}"
+        echo "while running: ${test_cmd}"
+        exit 1
+    fi
+fi
+
+echo -e "${green}PASS${creset}"
+}
+
+require_cmd() {
+    if ! command -v "$1"; then
+        echo -e "${red}WARNING:${creset} '$1' not found in PATH; skipping test"
+        exit 1
+    fi
+}
+
+#
+# End tests-funcs
+#

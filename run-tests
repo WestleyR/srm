@@ -1,0 +1,56 @@
+# Created by: WestleyR
+# Email: westleyr@nym.hush.com
+# Url: https://github.com/WestleyR/srm
+# Last modified date: 2020-07-30
+#
+# This file is licensed under the terms of
+#
+# The Clear BSD License
+#
+# Copyright (c) 2020 WestleyR
+# All rights reserved.
+#
+# This software is licensed under a Clear BSD License.
+#
+
+COMMAND="srm"
+
+echo "Testing ${COMMAND} version:"
+echo
+
+./${COMMAND} --version
+#./${COMMAND} --commit
+
+echo
+echo "Running all tests..."
+echo
+
+all_tests_num=0
+tests_failed_num=0
+tests_failed=""
+
+test_files=`ls -1 tests/ | sort -n`
+
+for t in $test_files; do
+	if [ -f "tests/${t}" ]; then
+		echo "Testing: ${t}:"
+		if ! bash "tests/${t}"; then
+			echo "test failed: ${t}"
+			((tests_failed_num+=1))
+			tests_failed=`echo "${test_failed} ${t}"`
+		fi
+		((all_tests_num+=1))
+	fi
+done
+
+echo
+echo "${all_tests_num} tests ran with ${tests_failed_num} test(s) failed."
+
+if [[ $tests_failed_num -ge 1 ]]; then
+    echo "FAILED TO RUN ALL TESTS"
+    exit 1
+fi
+
+#
+# End run-tests
+#

@@ -1,0 +1,10 @@
+. ./test-funcs
+
+# run-test <test-name> <test-command> <expect-to-contain-output> <expect-exit-code>
+
+run-test "srm flags" "./srm" "Usage of ./srm:" "" 1
+run-test "srm flags" "./srm -h" "Usage of ./srm:" "" 0
+run-test "srm flags" "./srm --help" "Usage of ./srm:" "" 0
+run-test "srm flags" "./srm -V" "v2" "" 0
+run-test "srm flags" "./srm --version" "v2" "" 0
+

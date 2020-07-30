@@ -40,7 +40,7 @@ $(TARGET): $(SRC)
 	$(GO) build
 	
 test: $(TARGET)
-	#@bash ./run-tests
+	@bash ./run-tests
 
 install: $(TARGET)
 	mkdir -p $(PREFIX)/bin
