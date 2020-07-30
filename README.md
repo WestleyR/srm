@@ -1,5 +1,7 @@
 # Safe Re-Move (`rm`) command with cache/undo
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/WestleyR/srm)](https://goreportcard.com/report/github.com/WestleyR/srm)
+
 This is a `rm` command imitation, but without actrally removing anything, only
 moving it into cache (`~/.cache/srm`). By doing this, you can recover
 accidentally-removed files.
