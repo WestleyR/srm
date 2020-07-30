@@ -16,49 +16,48 @@
 package main
 
 import (
-  "fmt"
-  "os"
-  "io/ioutil"
-  "path/filepath"
-  "strconv"
+	"fmt"
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"strconv"
 )
 
 func recoverFileFromTrashIndex(trashIndex int) error {
-  path := getCachePath()
+	path := getCachePath()
 
-  trashPath := filepath.Join(path, strconv.Itoa(trashIndex))
-  files, err := ioutil.ReadDir(trashPath)
-  if err != nil {
-    fmt.Println(err)
-    return err
-  }
+	trashPath := filepath.Join(path, strconv.Itoa(trashIndex))
+	files, err := ioutil.ReadDir(trashPath)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
 
-  if (len(files) == 0) {
-    return fmt.Errorf("no files at index: %d", trashIndex)
-  }
-  
-  fileName := files[0].Name()
-  fullTrashFile := filepath.Join(trashPath, fileName)
+	if len(files) == 0 {
+		return fmt.Errorf("no files at index: %d", trashIndex)
+	}
 
-  // Check to see if it already exists
-  // Only try 10 times
-  tmpName := fileName
-  for i := 1; i < 11; i++ {
-    if _, err := os.Stat(tmpName); err == nil {
-      tmpName = fileName + "." + strconv.Itoa(i)
-    } else {
-      fileName = tmpName
-      break
-    }
-  }
+	fileName := files[0].Name()
+	fullTrashFile := filepath.Join(trashPath, fileName)
 
-  err = os.Rename(fullTrashFile, fileName)
-  if err != nil {
-  	return err
-  }
+	// Check to see if it already exists
+	// Only try 10 times
+	tmpName := fileName
+	for i := 1; i < 11; i++ {
+		if _, err := os.Stat(tmpName); err == nil {
+			tmpName = fileName + "." + strconv.Itoa(i)
+		} else {
+			fileName = tmpName
+			break
+		}
+	}
 
-  fmt.Printf("File %s has been recovered to the current directory as: %s\n", files[0].Name(), fileName)
+	err = os.Rename(fullTrashFile, fileName)
+	if err != nil {
+		return err
+	}
 
-  return nil
+	fmt.Printf("File %s has been recovered to the current directory as: %s\n", files[0].Name(), fileName)
+
+	return nil
 }
-

@@ -25,7 +25,7 @@ import (
 const srmVersion = "v2.0.0.a2, July 30, 2020"
 
 func showVersion() {
-  fmt.Printf("%s\n", srmVersion)
+	fmt.Printf("%s\n", srmVersion)
 }
 
 func main() {
@@ -39,7 +39,7 @@ func main() {
 	force_flag := flag.BoolP("force", "f", false, "Remove a write-protected file.")
 	list_cache_flag := flag.BoolP("list-cache", "l", false, "List recent removed files.")
 	list_all_cache_flag := flag.BoolP("list-all-cache", "a", false, "List all cached files.")
-  recover_file_flag := flag.IntP("recover", "s", -1, "Recover a removed file from the index list-cache.")
+	recover_file_flag := flag.IntP("recover", "s", -1, "Recover a removed file from the index list-cache.")
 
 	flag.Parse()
 	args := flag.Args()
@@ -49,39 +49,39 @@ func main() {
 
 	_ = *verbose_flag
 
-  // Help flag
-  if *help_flag {
-    flag.Usage()
-    os.Exit(0)
-  }
+	// Help flag
+	if *help_flag {
+		flag.Usage()
+		os.Exit(0)
+	}
 
-  // Version flag
-  if *version_flag {
-    showVersion()
-    os.Exit(0)
-  }
+	// Version flag
+	if *version_flag {
+		showVersion()
+		os.Exit(0)
+	}
 
-  // List cache flag
-  if *list_cache_flag {
-    listRecentCache()
-    os.Exit(0)
-  }
+	// List cache flag
+	if *list_cache_flag {
+		listRecentCache()
+		os.Exit(0)
+	}
 
-  // List all cache flag
-  if *list_all_cache_flag {
-    os.Exit(0)
-  }
+	// List all cache flag
+	if *list_all_cache_flag {
+		os.Exit(0)
+	}
 
-  // Recover file flag
-  if *recover_file_flag != -1 {
-    err := recoverFileFromTrashIndex(*recover_file_flag)
-    if err != nil {
-      fmt.Fprintf(os.Stderr, "%s\n", err)
-      os.Exit(1)
-    }
+	// Recover file flag
+	if *recover_file_flag != -1 {
+		err := recoverFileFromTrashIndex(*recover_file_flag)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s\n", err)
+			os.Exit(1)
+		}
 
-    os.Exit(0)
-  }
+		os.Exit(0)
+	}
 
 	// If there are no files, then show the help menu and exit 1
 	if len(args) == 0 {
@@ -89,7 +89,7 @@ func main() {
 		os.Exit(1)
 	}
 
-  // If not doing anything else, then remove the files passed
+	// If not doing anything else, then remove the files passed
 	var options srmOptions
 	options.force = *force_flag
 	options.recursive = *recursive_flag
