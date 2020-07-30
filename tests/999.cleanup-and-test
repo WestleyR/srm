@@ -4,20 +4,18 @@
 
 run-test "srm cleanup - non existent file" "./srm tests/testingdata/non-existent-file" "tests/testingdata/non-existent-file: does not exist" "" 1
 
-run-test "srm cleanup" "./srm tests/testingdata/file1" "" "" 0
-run-test "srm cleanup" "./srm tests/testingdata/no-perm" "" "" 1
-run-test "srm cleanup" "./srm -r tests/testingdata/no-perm" "" "" 1
-run-test "srm cleanup" "./srm -f tests/testingdata/no-perm" "" "" 0
-run-test "srm cleanup" "./srm tests/testingdata/link2" "" "" 0
-run-test "srm cleanup" "./srm tests/testingdata/link1" "" "" 0
-run-test "srm cleanup" "./srm tests/testingdata/broken-link-file" "" "" 0
+run-test "srm cleanup - file1" "./srm tests/testingdata/file1" "" "" 0
+run-test "srm cleanup - no-perm" "./srm tests/testingdata/no-perm" "" "" 1
+run-test "srm cleanup - no-perm" "./srm -r tests/testingdata/no-perm" "" "" 1
+run-test "srm cleanup - no-perm" "./srm -f tests/testingdata/no-perm" "" "" 0
+run-test "srm cleanup - link2" "./srm tests/testingdata/link2" "" "" 0
+run-test "srm cleanup - link1" "./srm tests/testingdata/link1" "" "" 0
+run-test "srm cleanup - broken-link-file" "./srm tests/testingdata/broken-link-file" "" "" 0
 
-run-test "srm cleanup" "./srm tests/testingdata/file2" "" "" 0
-run-test "srm cleanup" "./srm tests/testingdata/" "" "" 1
-run-test "srm cleanup" "./srm -f tests/testingdata/" "" "" 1
-run-test "srm cleanup" "./srm -f tests/testingdata/" "" "" 1
-run-test "srm cleanup" "./srm -f tests/testingdata" "" "" 1
-run-test "srm cleanup" "./srm -f tests/testingdata" "" "" 1
-run-test "srm cleanup" "./srm -r tests/testingdata" "" "" 0
+run-test "srm cleanup - file2" "./srm tests/testingdata/file2" "" "" 0
+run-test "srm cleanup - testingdata/" "./srm tests/testingdata/" "" "" 1
+run-test "srm cleanup - testingdata/" "./srm -f tests/testingdata/" "" "" 1
+run-test "srm cleanup - testingdata" "./srm -f tests/testingdata" "" "" 1
+run-test "srm cleanup - testingdata" "./srm -r tests/testingdata" "" "" 0
 
 
