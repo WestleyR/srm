@@ -6,4 +6,5 @@
  - [ ] List output should have color
  - [ ] Should say if list output file is a directory
  - [ ] Should show how many files are in trash list, like: .../trash/21/foo [21 files]
+ - [ ] When listing cache, fix issue when theres less then 10 files there
 

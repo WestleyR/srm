@@ -24,7 +24,10 @@ mkdir -p x86_64_linux/srm/${TARGET_VERSION}/bin
 mkdir -p macos/srm/${TARGET_VERSION}/bin
 mkdir -p armv6l/srm/${TARGET_VERSION}/bin
 
-gox -osarch="linux/amd64 darwin/amd64 linux/arm" ../
+gox -osarch="linux/amd64 darwin/amd64" ../
+
+# Now compile for arm since there was some issues with gox
+GOOS=linux GOARCH=arm GOARM=5 go build -o srm_linux_arm ../
 
 mv srm_linux_amd64 x86_64_linux/srm/${TARGET_VERSION}/bin/srm
 mv srm_linux_arm armv6l/srm/${TARGET_VERSION}/bin/srm
