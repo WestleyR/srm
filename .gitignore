@@ -1,5 +1,6 @@
 /srm
 *.o
 /binaries
+tests/testingdata
 .DS_Store
 

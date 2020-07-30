@@ -21,6 +21,15 @@ echo
 ./${COMMAND} --version
 #./${COMMAND} --commit
 
+echo "Generating testdata..."
+test -d tests/testingdata && rm -rf tests/testingdata
+cp -r tests/testdata tests/testingdata
+chmod 000 tests/testingdata/no-perm
+ln -s $(PWD)/tests/testingdata/link1 $(PWD)/tests/testingdata/link2
+touch tests/testingdata/broken-link
+ln -s $(PWD)/tests/testingdata/broken-link $(PWD)/tests/testingdata/broken-link-file
+rm tests/testingdata/broken-link
+
 echo
 echo "Running all tests..."
 echo
