@@ -1,7 +1,7 @@
 // Created by: WestleyR
 // Email: westleyr@nym.hush.com
 // Url: https://github.com/WestleyR/srm
-// Last modified date: 2020-07-28
+// Last modified date: 2020-07-30
 //
 // This file is licensed under the terms of
 //
@@ -31,10 +31,24 @@ type srmOptions struct {
 	filePath string
 }
 
+func doesPathExist(path string) bool {
+    err := unix.Access(path, unix.F_OK)
+	if err != nil && !os.IsNotExist(err) {
+	    return false
+    }
+
+	if os.IsNotExist(err) {
+	    _, err := os.Lstat(path)
+	    if err != nil {
+	        return false
+        }
+    }
+	return true
+}
+
 func isPathADirectory(path string) bool {
 	fi, err := os.Stat(path)
 	if err != nil {
-		fmt.Println(err)
 		return false
 	}
 	switch mode := fi.Mode(); {
@@ -47,7 +61,11 @@ func isPathADirectory(path string) bool {
 }
 
 func checkIfFileIsWriteProtected(file string) bool {
-	return unix.Access(file, unix.W_OK) == nil
+    err := unix.Access(file, unix.W_OK)
+	if os.IsPermission(err) {
+	    return false
+    }
+	return true
 }
 
 func checkForWriteProtectedFileIn(path string) error {
@@ -65,6 +83,10 @@ func checkForWriteProtectedFileIn(path string) error {
 }
 
 func srmFile(filePath string, options srmOptions) error {
+    if !doesPathExist(filePath) {
+        return fmt.Errorf("%s: does not exist", filePath)
+    }
+
 	trashPath := getFileTrashPath(filepath.Base(filePath))
 
 	if isPathADirectory(filePath) {
@@ -90,14 +112,14 @@ func srmFile(filePath string, options srmOptions) error {
 		// Its a plain file
 
 		if !options.force {
-      if !checkIfFileIsWriteProtected(filePath) {
-  			return fmt.Errorf("%s: is write protected", filePath)
-      }
-    }
+			if !checkIfFileIsWriteProtected(filePath) {
+  				return fmt.Errorf("%s: is write protected", filePath)
+			}
+		}
 
 		// Move the file to srm trash
 		err := os.Rename(filePath, trashPath)
-		if err != nil {
+		if err != nil && os.IsNotExist(err) {
 			return err
 		}
 	}
