@@ -47,19 +47,64 @@ func getFileDate(path string) string {
 	return fileDate
 }
 
-func getNumberOfFilesInDir(path string) int {
+func getTrashFileNumberSizeFormat(path string) string {
 	files := 0
-	_ = filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+	var size int64
+
+	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
 		files++
+		if !info.IsDir() {
+			size += info.Size()
+		}
+
 		return nil
 	})
+	if err != nil {
+		return ""
+	}
 
 	// Take 1 away from files since we are not including the selected directory
 	files--
-	return files
+
+	fmtStr := colorYellow + "["
+	somethingToPrint := false
+
+	// Not a directory, or empty dir
+	if files != 0 {
+		fmtStr += fmt.Sprintf("%d files", files)
+		somethingToPrint = true
+	}
+	if size != 0 {
+		// Only add the ", " if there was more then one file in the trash item
+		if somethingToPrint {
+			fmtStr += ", "
+		}
+		fmtStr += formatBytesToStr(size)
+		somethingToPrint = true
+	}
+	fmtStr += "]" + colorReset
+
+	if !somethingToPrint {
+		return ""
+	}
+
+	return fmtStr
+}
+
+func formatBytesToStr(b int64) string {
+	const unit = 1000
+	if b < unit {
+		return fmt.Sprintf("%d B", b)
+	}
+	div, exp := int64(unit), 0
+	for n := b / unit; n >= unit; n /= unit {
+		div *= unit
+		exp++
+	}
+	return fmt.Sprintf("%.1f %cB", float64(b)/float64(div), "kMGTPE"[exp])
 }
 
 func listRecentCache() error {
@@ -83,16 +128,16 @@ func listRecentCache() error {
 				if isPathADir(filepath.Join(trashPath, trashName)) {
 					// Trash item is a directory
 					colorDir = true
-					trashName = fmt.Sprintf("%s%s [%d files]", trashName, colorYellow, getNumberOfFilesInDir(filepath.Join(trashPath, trashName)))
 				}
 			}
 			fileDate := getFileDate(trashPath)
 			fmt.Printf("%d: %s(%s)%s %s%s/%s", i, colorTeal, fileDate, colorReset, colorPink, trashPath, colorReset)
 			if colorDir {
-				fmt.Printf("%s%s%s\n", colorBlue, trashName, colorReset)
+				fmt.Printf("%s%s%s", colorBlue, trashName, colorReset)
 			} else {
-				fmt.Printf("%s\n", trashName)
+				fmt.Printf("%s", trashName)
 			}
+			fmt.Printf(" %s\n", getTrashFileNumberSizeFormat(filepath.Join(trashPath, trashName)))
 		}
 	}
 
