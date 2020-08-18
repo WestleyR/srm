@@ -1,7 +1,7 @@
 # Created by: WestleyR
 # Email: westleyr@nym.hush.com
 # Url: https://github.com/WestleyR/srm
-# Last modified date: 2020-07-30
+# Last modified date: 2020-08-18
 #
 # This file is licensed under the terms of
 #
@@ -13,11 +13,13 @@
 # This software is licensed under a Clear BSD License.
 #
 
-GO = go
+PREFIX = /usr/local
+
 TARGET = srm
 TARGET_VERSION = 2.0.0.a1
 
-PREFIX = /usr/local
+GO = go
+GOFLAGS = -ldflags -w
 
 MODDED = $(shell if command -v git > /dev/null ; then (git diff --exit-code --quiet && echo \"[No changes]\") || echo \"[With uncommited changes]\" ; else echo \"[unknown]\" ; fi)
 
@@ -37,7 +39,7 @@ all: $(TARGET)
 
 .PHONY:
 $(TARGET): $(SRC)
-	$(GO) build
+	$(GO) build $(GOFLAGS)
 	
 test: $(TARGET)
 	@bash ./run-tests
@@ -47,9 +49,6 @@ install: $(TARGET)
 	cp -f $(TARGET) $(PREFIX)/bin
 
 package: $(SRC)
-ifeq (, $(shell which gox))
-$(error "gox not installed; run: go get github.com...")
-endif
 	TARGET_VERSION=$(TARGET_VERSION) ./package.sh
 
 clean:
