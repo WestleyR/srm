@@ -10,4 +10,6 @@
  - [x] Fix issue when removing a broken link
  - [ ] Add tests
  - [ ] Add option to disable color
+ - [x] Recover option should be able to accept more then one number
+
 

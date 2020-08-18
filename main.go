@@ -1,7 +1,7 @@
 // Created by: WestleyR
 // Email: westleyr@nym.hush.com
 // Url: https://github.com/WestleyR/srm
-// Last modified date: 2020-08-11
+// Last modified date: 2020-08-18
 //
 // This file is licensed under the terms of
 //
@@ -22,7 +22,7 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-const srmVersion = "v2.0.0.a3, Aug 11, 2020"
+const srmVersion = "v2.0.0.a1, Aug 18, 2020"
 
 func showVersion() {
 	fmt.Printf("%s\n", srmVersion)
@@ -39,7 +39,7 @@ func main() {
 	force_flag := flag.BoolP("force", "f", false, "Remove a write-protected file.")
 	list_cache_flag := flag.BoolP("list-cache", "l", false, "List recent removed files.")
 	list_all_cache_flag := flag.BoolP("list-all-cache", "a", false, "List all cached files.")
-	recover_file_flag := flag.IntP("recover", "s", -1, "Recover a removed file from the index list-cache.")
+	recover_file_flag := flag.IntSliceP("recover", "s", nil, "Recover a removed file(s) from the index list-cache.\nSeperate numbers by commas (,) no spaces.")
 
 	flag.Parse()
 	args := flag.Args()
@@ -73,14 +73,17 @@ func main() {
 	}
 
 	// Recover file flag
-	if *recover_file_flag != -1 {
-		err := recoverFileFromTrashIndex(*recover_file_flag)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s\n", err)
-			os.Exit(1)
+	if *recover_file_flag != nil {
+		exitCode := 0
+		for _, n := range *recover_file_flag {
+			err := recoverFileFromTrashIndex(n)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
+				exitCode = 1
+			}
 		}
 
-		os.Exit(0)
+		os.Exit(exitCode)
 	}
 
 	// If there are no files, then show the help menu and exit 1
@@ -100,7 +103,7 @@ func main() {
 		err := srmFile(f, options)
 		if err != nil {
 			// Error should be already formatted
-			fmt.Fprintf(os.Stderr, "%s\n", err)
+			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
 			exitCode = 1
 		}
 	}

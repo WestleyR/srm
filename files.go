@@ -1,7 +1,7 @@
 // Created by: WestleyR
 // Email: westleyr@nym.hush.com
 // Url: https://github.com/WestleyR/srm
-// Last modified date: 2020-07-30
+// Last modified date: 2020-08-18
 //
 // This file is licensed under the terms of
 //
@@ -119,7 +119,7 @@ func srmFile(filePath string, options srmOptions) error {
 
 		// Move the file to srm trash
 		err := os.Rename(filePath, trashPath)
-		if err != nil && os.IsNotExist(err) {
+		if err != nil && !os.IsNotExist(err) {
 			return err
 		}
 	}

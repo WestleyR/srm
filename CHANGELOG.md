@@ -4,7 +4,7 @@ _**NOTES:**_
  1. Versions containing "alpha", "a", "beta", "b", or "rc" are pre-releases, and
 subject to change.
 
-## v2.0.0.a1 - July 29, 2020
+## v2.0.0.a1 - Aug 18, 2020
 
 ### ADDED
  - Added `--list-cache` option
