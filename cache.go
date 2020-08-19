@@ -1,7 +1,7 @@
 // Created by: WestleyR
 // Email: westleyr@nym.hush.com
 // Url: https://github.com/WestleyR/srm
-// Last modified date: 2020-07-28
+// Last modified date: 2020-08-18
 //
 // This file is licensed under the terms of
 //
@@ -58,7 +58,7 @@ func getCachePath() string {
 	return filepath.Join(home, ".cache/srm2/trash")
 }
 
-func init_cache() {
+func initCache() {
 	cachePath := getCachePath()
 
 	err := os.MkdirAll(cachePath, 0700)

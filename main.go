@@ -29,53 +29,53 @@ func showVersion() {
 }
 
 func main() {
-	init_cache()
+	initCache()
 
-	help_flag := flag.BoolP("help", "h", false, "Show help output.")
-	version_flag := flag.BoolP("version", "V", false, "Show srm version.")
-	verbose_flag := flag.BoolP("verbose", "v", false, "Be more verbose.")
-	debug_flag := flag.BoolP("debug", "d", false, "Show debug information.")
-	recursive_flag := flag.BoolP("recursive", "r", false, "Be recursive, remove a directory.")
-	force_flag := flag.BoolP("force", "f", false, "Remove a write-protected file.")
-	list_cache_flag := flag.BoolP("list-cache", "l", false, "List recent removed files.")
-	list_all_cache_flag := flag.BoolP("list-all-cache", "a", false, "List all cached files.")
-	recover_file_flag := flag.IntSliceP("recover", "s", nil, "Recover a removed file(s) from the index list-cache.\nSeperate numbers by commas (,) no spaces.")
+	helpFlag := flag.BoolP("help", "h", false, "Show help output.")
+	versionFlag := flag.BoolP("version", "V", false, "Show srm version.")
+	verboseFlag := flag.BoolP("verbose", "v", false, "Be more verbose.")
+	debugFlag := flag.BoolP("debug", "d", false, "Show debug information.")
+	recursiveFlag := flag.BoolP("recursive", "r", false, "Be recursive, remove a directory.")
+	forceFlag := flag.BoolP("force", "f", false, "Remove a write-protected file.")
+	listCacheFlag := flag.BoolP("list-cache", "l", false, "List recent removed files.")
+	listAllCacheFlag := flag.BoolP("list-all-cache", "a", false, "List all cached files.")
+	recoverFileFlag := flag.IntSliceP("recover", "s", nil, "Recover a removed file(s) from the index list-cache.\nSeperate numbers by commas (,) no spaces.")
 
 	flag.Parse()
 	args := flag.Args()
 
-	set_debug(*debug_flag)
-	print_debugf("THIS IS A DEBUG TEST")
+	setDebug(*debugFlag)
+	printDebugf("THIS IS A DEBUG TEST")
 
-	_ = *verbose_flag
+	_ = *verboseFlag
 
 	// Help flag
-	if *help_flag {
+	if *helpFlag {
 		flag.Usage()
 		os.Exit(0)
 	}
 
 	// Version flag
-	if *version_flag {
+	if *versionFlag {
 		showVersion()
 		os.Exit(0)
 	}
 
 	// List cache flag
-	if *list_cache_flag {
+	if *listCacheFlag {
 		listRecentCache()
 		os.Exit(0)
 	}
 
 	// List all cache flag
-	if *list_all_cache_flag {
+	if *listAllCacheFlag {
 		os.Exit(0)
 	}
 
 	// Recover file flag
-	if *recover_file_flag != nil {
+	if *recoverFileFlag != nil {
 		exitCode := 0
-		for _, n := range *recover_file_flag {
+		for _, n := range *recoverFileFlag {
 			err := recoverFileFromTrashIndex(n)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
@@ -94,8 +94,8 @@ func main() {
 
 	// If not doing anything else, then remove the files passed
 	var options srmOptions
-	options.force = *force_flag
-	options.recursive = *recursive_flag
+	options.force = *forceFlag
+	options.recursive = *recursiveFlag
 
 	exitCode := 0
 

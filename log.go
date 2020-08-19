@@ -1,7 +1,7 @@
 // Created by: WestleyR
 // Email: westleyr@nym.hush.com
 // Url: https://github.com/WestleyR/srm
-// Last modified date: 2020-07-28
+// Last modified date: 2020-08-18
 //
 // This file is licensed under the terms of
 //
@@ -23,15 +23,15 @@ import (
 
 var debug = false
 
-func set_debug(value bool) {
+func setDebug(value bool) {
 	debug = value
 }
 
-func is_debug() bool {
+func isDebug() bool {
 	return debug
 }
 
-func print_debugf(format string) {
+func printDebugf(format string) {
 	if debug {
 		fmt.Println(format)
 	}
