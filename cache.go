@@ -23,6 +23,24 @@ import (
 	"strconv"
 )
 
+func cleanCacheAUTO() error {
+	path := getCachePath()
+
+	// First get the max entities in the cache dir
+	// TODO: error check
+	files, _ := ioutil.ReadDir(path)
+	maxItems := len(files)
+
+	for i := 0; i < maxItems-10; i++ {
+		trashPath := filepath.Join(path, strconv.Itoa(i))
+		//files, err := ioutil.ReadDir(trashPath)
+
+		fmt.Println("File to remove: ", trashPath)
+	}
+
+	return nil
+}
+
 // cache path should be "~/.cache/srm/trash/{1,2,3...}/item-you-trashed"
 func getFileTrashPath(filename string) string {
 	cachePath := getCachePath()

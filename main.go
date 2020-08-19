@@ -35,6 +35,7 @@ func main() {
 	versionFlag := flag.BoolP("version", "V", false, "Show srm version.")
 	verboseFlag := flag.BoolP("verbose", "v", false, "Be more verbose.")
 	debugFlag := flag.BoolP("debug", "d", false, "Show debug information.")
+	cleanCacheFlag := flag.StringP("clean", "c", "", "Clean the cache dir (options: auto,all).")
 	recursiveFlag := flag.BoolP("recursive", "r", false, "Be recursive, remove a directory.")
 	forceFlag := flag.BoolP("force", "f", false, "Remove a write-protected file.")
 	listCacheFlag := flag.BoolP("list-cache", "l", false, "List recent removed files.")
@@ -58,6 +59,23 @@ func main() {
 	// Version flag
 	if *versionFlag {
 		showVersion()
+		os.Exit(0)
+	}
+
+	// Clean cache flag
+	if *cleanCacheFlag != "" {
+		if *cleanCacheFlag == "auto" {
+			if err := cleanCacheAUTO(); err != nil {
+				fmt.Fprintf(os.Stderr, "%s: failed to clean cache: %s\n", os.Args[0], err)
+				os.Exit(1)
+			}
+		} else if *cleanCacheFlag == "all" {
+			fmt.Println("Not yet...")
+		} else {
+			fmt.Fprintf(os.Stderr, "%s: invalid option for --clean: %s\n", os.Args[0], *cleanCacheFlag)
+			os.Exit(1)
+		}
+
 		os.Exit(0)
 	}
 
