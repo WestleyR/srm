@@ -22,7 +22,7 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-const srmVersion = "v2.0.0.a1, Aug 18, 2020"
+const srmVersion = "v2.0.0.a1, Aug 21, 2020"
 
 func showVersion() {
 	fmt.Printf("%s\n", srmVersion)
