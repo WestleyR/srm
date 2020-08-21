@@ -1,7 +1,7 @@
 // Created by: WestleyR
 // Email: westleyr@nym.hush.com
 // Url: https://github.com/WestleyR/srm
-// Last modified date: 2020-08-18
+// Last modified date: 2020-08-21
 //
 // This file is licensed under the terms of
 //
@@ -52,6 +52,9 @@ func main() {
 
 	// Help flag
 	if *helpFlag {
+		fmt.Printf("Copyright (c) 2019-2020 WestleyR. All rights reserved.\n")
+		fmt.Printf("This software is licensed under the terms of The Clear BSD License.\n")
+		fmt.Printf("Source code: https://github.com/WestleyR/srm\n")
 		flag.Usage()
 		os.Exit(0)
 	}

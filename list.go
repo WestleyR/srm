@@ -1,7 +1,7 @@
 // Created by: WestleyR
 // Email: westleyr@nym.hush.com
 // Url: https://github.com/WestleyR/srm
-// Last modified date: 2020-08-11
+// Last modified date: 2020-08-21
 //
 // This file is licensed under the terms of
 //
@@ -119,7 +119,8 @@ func listRecentCache() error {
 		trashPath := filepath.Join(path, strconv.Itoa(i))
 		files, err := ioutil.ReadDir(trashPath)
 		if err != nil {
-			fmt.Println(err)
+		    // TODO: if debug is true, then print this
+			//fmt.Fprintf(os.Stderr, "failed to open: %s\n", trashPath)
 		} else {
 			trashName := colorRed + "[no items]" + colorReset
 			colorDir := false
