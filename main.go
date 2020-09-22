@@ -1,7 +1,7 @@
 // Created by: WestleyR
 // Email: westleyr@nym.hush.com
 // Url: https://github.com/WestleyR/srm
-// Last modified date: 2020-08-21
+// Last modified date: 2020-09-22
 //
 // This file is licensed under the terms of
 //
@@ -22,7 +22,7 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-const srmVersion = "v2.0.0.a1, Aug 21, 2020"
+const srmVersion = "v2.0.0.a1, Sep 22, 2020"
 
 func showVersion() {
 	fmt.Printf("%s\n", srmVersion)
