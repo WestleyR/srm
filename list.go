@@ -1,7 +1,7 @@
 // Created by: WestleyR
 // Email: westleyr@nym.hush.com
 // Url: https://github.com/WestleyR/srm
-// Last modified date: 2020-08-21
+// Last modified date: 2020-09-22
 //
 // This file is licensed under the terms of
 //
@@ -110,16 +110,40 @@ func formatBytesToStr(b int64) string {
 func listRecentCache() error {
 	path := getCachePath()
 
-	// First get the max entities in the cache dir
-	// TODO: error check
-	files, _ := ioutil.ReadDir(path)
-	maxItems := len(files)
+	// Get the last cache number
+	maxItems := 0
+	items, _ := ioutil.ReadDir(path)
+	for _, item := range items {
+		if item.IsDir() {
+			maxItems++
+		} else {
+			// TODO: handle file there
+			fmt.Println(item.Name())
+		}
+	}
+
+	fullPath := filepath.Join(path, strconv.Itoa(maxItems))
+
+	// Make sure no more exist, sometimes when one of the cache dirs is
+	// removed, it can screw up the last number. Only try 100 times
+	// TODO: add debug here...
+	for i := 0; i < 100; i++ {
+		if doesFileExists(fullPath) {
+			// File already exists, then add incremt again...
+			maxItems++
+			fullPath = filepath.Join(path, strconv.Itoa(maxItems))
+		} else {
+			break
+		}
+	}
+
+	fmt.Println("Max len: ", maxItems)
 
 	for i := maxItems - 10; i <= maxItems; i++ {
 		trashPath := filepath.Join(path, strconv.Itoa(i))
 		files, err := ioutil.ReadDir(trashPath)
 		if err != nil {
-		    // TODO: if debug is true, then print this
+			// TODO: if debug is true, then print this
 			//fmt.Fprintf(os.Stderr, "failed to open: %s\n", trashPath)
 		} else {
 			trashName := colorRed + "[no items]" + colorReset
