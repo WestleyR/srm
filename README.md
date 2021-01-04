@@ -13,6 +13,8 @@ _undo/list command still WIP..._
 
 ## Install
 
+**Please see the [release page](https://github.com/WestleyR/srm/releases) for the latest pre-release.**
+
 Install via package manager ([gpack](https://github.com/WestleyR/gpack)):
 
 ```
