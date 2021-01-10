@@ -13,15 +13,22 @@ _undo/list command still WIP..._
 
 ## Install
 
-**Please see the [release page](https://github.com/WestleyR/srm/releases) for the latest pre-release.**
+**Please see the [release page](https://github.com/WestleyR/srm/releases) for the latest pre-release downloads.**
 
-Install via package manager ([gpack](https://github.com/WestleyR/gpack)):
+
+If you have go installed, then you can run:
 
 ```
-gpack install WestleyR/srm
+$ go get -u github.com/WestleyR/srm/cmd/srm
 ```
 
-Or install the Go dev code: _beta_
+Or install via package manager ([gpack](https://github.com/WestleyR/gpack)):
+
+```
+$ gpack install WestleyR/srm
+```
+
+Or by the original way:
 
 ```
 git clone https://github.com/WestleyR/srm
@@ -30,13 +37,15 @@ make
 sudo make install  # Or without root: 'make install PREFIX=${HOME}/.local'
 ```
 
+### Aliasing
+
 Optional, but recommended to add this to your `~/.bashrc` or `~/.bash_profile`:
 
 ```
 alias rm="srm"
 ```
 
-### Examples
+## Examples
 
 Demo coming soon. However, this should be equivalent to the `rm` command.
 
