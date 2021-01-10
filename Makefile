@@ -39,7 +39,7 @@ all: $(TARGET)
 
 .PHONY:
 $(TARGET): $(SRC)
-	$(GO) build -o $(TARGET) $(GOFLAGS) cmd/srm/main.go
+	$(GO) build $(GOFLAGS) cmd/srm/srm.go
 	
 test: $(TARGET)
 	@bash ./run-tests
