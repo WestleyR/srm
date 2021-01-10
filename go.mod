@@ -6,5 +6,5 @@ replace github.com/WestleyR/srm/internal/srm => ./internal/srm
 
 require (
 	github.com/spf13/pflag v1.0.5
-	golang.org/x/sys v0.0.0-20210108172913-0df2131ae363
+	golang.org/x/sys v0.0.0-20210110051926-789bb1bd4061
 )
