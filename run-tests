@@ -1,13 +1,13 @@
 # Created by: WestleyR
 # Email: westleyr@nym.hush.com
 # Url: https://github.com/WestleyR/srm
-# Last modified date: 2020-07-30
+# Last modified date: 2021-01-09
 #
 # This file is licensed under the terms of
 #
 # The Clear BSD License
 #
-# Copyright (c) 2020 WestleyR
+# Copyright (c) 2020-2021 WestleyR
 # All rights reserved.
 #
 # This software is licensed under a Clear BSD License.
@@ -25,9 +25,9 @@ echo "Generating testdata..."
 test -d tests/testingdata && rm -rf tests/testingdata
 cp -r tests/testdata tests/testingdata
 chmod 000 tests/testingdata/no-perm
-ln -s $(PWD)/tests/testingdata/link1 $(PWD)/tests/testingdata/link2
+ln -s $(pwd)/tests/testingdata/link1 $(pwd)/tests/testingdata/link2
 touch tests/testingdata/broken-link
-ln -s $(PWD)/tests/testingdata/broken-link $(PWD)/tests/testingdata/broken-link-file
+ln -s $(pwd)/tests/testingdata/broken-link $(pwd)/tests/testingdata/broken-link-file
 rm tests/testingdata/broken-link
 
 echo

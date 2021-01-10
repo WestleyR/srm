@@ -1,0 +1,5 @@
+github.com/WestleyR/srm v1.1.1 h1:8g1vS6eGKP8RiKLKqgSo1Ht/cKNZQ6gIrFFf922gR1s=
+github.com/spf13/pflag v1.0.5 h1:iy+VFUOCP1a+8yFto/drg2CJ5u0yRoB7fZw3DKv/JXA=
+github.com/spf13/pflag v1.0.5/go.mod h1:McXfInJRrz4CZXVZOBLb0bTZqETkiAhM9Iw0y3An2Bg=
+golang.org/x/sys v0.0.0-20210108172913-0df2131ae363 h1:wHn06sgWHMO1VsQ8F+KzDJx/JzqfsNLnc+oEi07qD7s=
+golang.org/x/sys v0.0.0-20210108172913-0df2131ae363/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
