@@ -19,7 +19,7 @@ TARGET = srm
 TARGET_VERSION = 2.0.0.a1
 
 GO = go
-GOFLAGS = -ldflags -w
+GOFLAGS = -ldflags -w -mod=vendor
 
 MODDED = $(shell if command -v git > /dev/null ; then (git diff --exit-code --quiet && echo \"[No changes]\") || echo \"[With uncommited changes]\" ; else echo \"[unknown]\" ; fi)
 
