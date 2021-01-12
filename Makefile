@@ -21,6 +21,8 @@ TARGET_VERSION = 2.0.0.a1
 GO = go
 GOFLAGS = -ldflags -w
 
+SRC = $(wildcard ./*.go)
+
 .PHONY:
 all: $(TARGET)
 

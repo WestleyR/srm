@@ -1,7 +1,7 @@
 // Created by: WestleyR
 // Email: westleyr@nym.hush.com
 // Url: https://github.com/WestleyR/srm
-// Last modified date: 2021-01-09
+// Last modified date: 2021-01-11
 //
 // This file is licensed under the terms of
 //
@@ -23,7 +23,7 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-const srmVersion = "v2.0.0.a1, Sep 22, 2020"
+const srmVersion = "v2.0.0.a1 2021-01-11"
 
 func showVersion() {
 	fmt.Printf("%s\n", srmVersion)
@@ -32,30 +32,24 @@ func showVersion() {
 func main() {
 	srm.InitCache()
 
-	helpFlag := flag.BoolP("help", "h", false, "Show help output.")
-	versionFlag := flag.BoolP("version", "V", false, "Show srm version.")
-	verboseFlag := flag.BoolP("verbose", "v", false, "Be more verbose.")
-	debugFlag := flag.BoolP("debug", "d", false, "Show debug information.")
+	helpFlag := flag.BoolP("help", "h", false, "Print this help output.")
+	versionFlag := flag.BoolP("version", "V", false, "print srm version.")
 	cleanCacheFlag := flag.StringP("clean", "c", "", "Clean the cache dir (options: auto,all).")
-	recursiveFlag := flag.BoolP("recursive", "r", false, "Be recursive, remove a directory.")
+	recursiveFlag := flag.BoolP("recursive", "r", false, "Remove recursively.")
 	forceFlag := flag.BoolP("force", "f", false, "Remove a write-protected file.")
 	listCacheFlag := flag.BoolP("list-cache", "l", false, "List recent removed files.")
-	listAllCacheFlag := flag.BoolP("list-all-cache", "a", false, "List all cached files.")
+	listAllCacheFlag := flag.BoolP("list-all-cache", "a", false, "List all removed files.")
 	recoverFileFlag := flag.IntSliceP("recover", "s", nil, "Recover a removed file(s) from the index list-cache.\nSeperate numbers by commas (,) no spaces.")
 
 	flag.Parse()
 	args := flag.Args()
 
-	srm.SetDebug(*debugFlag)
-	srm.PrintDebugf("THIS IS A DEBUG TEST")
-
-	_ = *verboseFlag
-
 	// Help flag
 	if *helpFlag {
-		fmt.Printf("Copyright (c) 2019-2020 WestleyR. All rights reserved.\n")
+		fmt.Printf("Copyright (c) 2019-2021 WestleyR. All rights reserved.\n")
 		fmt.Printf("This software is licensed under the terms of The Clear BSD License.\n")
 		fmt.Printf("Source code: https://github.com/WestleyR/srm\n")
+		fmt.Printf("\n")
 		flag.Usage()
 		os.Exit(0)
 	}
