@@ -16,7 +16,7 @@
 PREFIX = /usr/local
 
 TARGET = srm
-TARGET_VERSION = 2.0.0.a1
+TARGET_VERSION = 2.0.0.a2
 
 GO = go
 GOFLAGS = -ldflags -w
