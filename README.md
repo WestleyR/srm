@@ -13,7 +13,8 @@ _undo/list command still WIP..._
 
 ## Install
 
-**Please see the [release page](https://github.com/WestleyR/srm/releases) for the latest pre-release downloads.**
+**Please see the [release page](https://github.com/WestleyR/srm/releases) for the
+compiled binary and the latest pre-release downloads.**
 
 
 If you have go installed, then you can run:
