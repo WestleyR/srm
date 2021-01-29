@@ -82,6 +82,7 @@ func main() {
 
 	// List all cache flag
 	if *listAllCacheFlag {
+		fmt.Println("Not yet...")
 		os.Exit(0)
 	}
 
