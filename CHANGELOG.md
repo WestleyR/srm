@@ -4,6 +4,12 @@ _**NOTES:**_
  1. Versions containing "alpha", "a", "beta", "b", or "rc" are pre-releases, and
 subject to change.
 
+## v2.0.1 - Jan 28, 2021
+
+### FIXED
+ - Fixed the package version (duh!)
+
+
 ## v2.0.0 - Jan 28, 2021
 
 ### ADDED
