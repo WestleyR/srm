@@ -2,7 +2,8 @@
 # Created by: WestleyR
 # Email: westleyr@nym.hush.com
 # Url: https://github.com/WestleyR/srm
-# Last modified date: 2021-01-09
+# Created on 2020-07-29
+# Last modified date: 2021-01-28
 #
 # This file is licensed under the terms of
 #
@@ -33,9 +34,23 @@ GOOS=linux GOARCH=amd64 $GO_CMD build $GO_FLAGS -o srm_linux_amd64 ../cmd/srm/sr
 GOOS=darwin GOARCH=amd64 $GO_CMD build $GO_FLAGS -o srm_darwin_amd64 ../cmd/srm/srm.go
 GOOS=linux GOARCH=arm GOARM=5 $GO_CMD build $GO_FLAGS -o srm_linux_arm ../cmd/srm/srm.go
 
+# Copy the compiled binaries to the tarball dirs
 mv srm_linux_amd64 x86_64_linux/srm/${TARGET_VERSION}/bin/srm
 mv srm_linux_arm armv6l/srm/${TARGET_VERSION}/bin/srm
 mv srm_darwin_amd64 macos/srm/${TARGET_VERSION}/bin/srm
+
+# Copy the LICENSE file and README to the tarball
+cp ../LICENSE x86_64_linux/srm
+cp ../LICENSE macos/srm
+cp ../LICENSE armv6l/srm
+cp ../README.md x86_64_linux/srm
+cp ../README.md macos/srm
+cp ../README.md armv6l/srm
+
+# Copy the third-party licenses to the tarball
+cp -r ../THIRD_PARTY_LICENSES x86_64_linux/srm/
+cp -r ../THIRD_PARTY_LICENSES macos/srm/
+cp -r ../THIRD_PARTY_LICENSES armv6l/srm/
 
 cd x86_64_linux
 tar -czf srm-v${TARGET_VERSION}-x86_64_linux.tar.gz srm
@@ -52,6 +67,9 @@ mv macos/srm-v${TARGET_VERSION}-macos.tar.gz dist
 mv armv6l/srm-v${TARGET_VERSION}-armv6l.tar.gz dist
 
 cd dist
+
+echo
+echo "Binary packages are at: binaries/dist/*"
 
 echo
 echo "#########"
