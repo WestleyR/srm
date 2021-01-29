@@ -1,7 +1,6 @@
-# Created by: WestleyR
-# Email: westleyr@nym.hush.com
-# Url: https://github.com/WestleyR/srm
-# Last modified date: 2021-01-11
+# Created by WestleyR on July 28, 2020
+# Source code: https://github.com/WestleyR/srm
+# Last modified data: 2021-01-28
 #
 # This file is licensed under the terms of
 #
@@ -9,8 +8,6 @@
 #
 # Copyright (c) 2020-2021 WestleyR
 # All rights reserved.
-#
-# This software is licensed under a Clear BSD License.
 #
 
 PREFIX = /usr/local

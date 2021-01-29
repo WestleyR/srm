@@ -1,16 +1,13 @@
-// Created by: WestleyR
-// Email: westleyr@nym.hush.com
-// Url: https://github.com/WestleyR/srm
-// Last modified date: 2021-01-11
+// Created by WestleyR on July 28, 2020
+// Source code: https://github.com/WestleyR/srm
+// Last modified data: 2021-01-28
 //
 // This file is licensed under the terms of
 //
 // The Clear BSD License
 //
-// Copyright (c) 2019-2021 WestleyR
+// Copyright (c) 2020-2021 WestleyR
 // All rights reserved.
-//
-// This software is licensed under a Clear BSD License.
 //
 
 package main
@@ -46,7 +43,7 @@ func main() {
 
 	// Help flag
 	if *helpFlag {
-		fmt.Printf("Copyright (c) 2019-2021 WestleyR. All rights reserved.\n")
+		fmt.Printf("Copyright (c) 2020-2021 WestleyR. All rights reserved.\n")
 		fmt.Printf("This software is licensed under the terms of The Clear BSD License.\n")
 		fmt.Printf("Source code: https://github.com/WestleyR/srm\n")
 		fmt.Printf("\n")

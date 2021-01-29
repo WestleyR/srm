@@ -1,9 +1,6 @@
-#!/bin/bash
-# Created by: WestleyR
-# Email: westleyr@nym.hush.com
-# Url: https://github.com/WestleyR/srm
-# Created on 2020-07-29
-# Last modified date: 2021-01-28
+# Created by WestleyR on July 29, 2020
+# Source code: https://github.com/WestleyR/srm
+# Last modified data: 2021-01-28
 #
 # This file is licensed under the terms of
 #
@@ -11,8 +8,6 @@
 #
 # Copyright (c) 2020-2021 WestleyR
 # All rights reserved.
-#
-# This software is licensed under a Clear BSD License.
 #
 
 set -e
