@@ -1,13 +1,14 @@
+#
+#  Makefile
+#  srm - https://github.com/WestleyR/srm
+#
 # Created by WestleyR on July 28, 2020
 # Source code: https://github.com/WestleyR/srm
-# Last modified data: 2021-01-28
 #
-# This file is licensed under the terms of
-#
-# The Clear BSD License
-#
-# Copyright (c) 2020-2021 WestleyR
-# All rights reserved.
+# Copyright (c) 2020-2021 WestleyR. All rights reserved.
+# This software is licensed under a BSD 3-Clause Clear License.
+# Consult the LICENSE file that came with this software regarding
+# your rights to distribute this software.
 #
 
 PREFIX = /usr/local

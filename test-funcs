@@ -1,16 +1,14 @@
-# Created by: WestleyR
-# Email: westleyr@nym.hush.com
-# Url: https://github.com/WestleyR/srm
-# Last modified date: 2020-07-30
 #
-# This file is licensed under the terms of
+#  test-funcs
+#  srm - https://github.com/WestleyR/srm
 #
-# The Clear BSD License
+# Created by WestleyR on July 30, 2020
+# Source code: https://github.com/WestleyR/srm
 #
-# Copyright (c) 2020 WestleyR
-# All rights reserved.
-#
-# This software is licensed under a Clear BSD License.
+# Copyright (c) 2020-2021 WestleyR. All rights reserved.
+# This software is licensed under a BSD 3-Clause Clear License.
+# Consult the LICENSE file that came with this software regarding
+# your rights to distribute this software.
 #
 
 # usage:
