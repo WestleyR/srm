@@ -2,7 +2,7 @@
 //  srm.go
 //  srm - https://github.com/WestleyR/srm
 //
-// Created by WestleyR on July 28, 2020
+// Created by WestleyR <westleyr@nym.hush.com> on July 28, 2020
 // Source code: https://github.com/WestleyR/srm
 //
 // Copyright (c) 2020-2021 WestleyR. All rights reserved.
@@ -17,11 +17,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/WestleyR/srm/internal/srm"
+	"github.com/WestleyR/srm/internal/pkg/srm"
 	flag "github.com/spf13/pflag"
 )
 
-const srmVersion = "2.0.1"
+const srmVersion = "2.1.0"
 
 func showVersion() {
 	fmt.Printf("%s\n", srmVersion)
@@ -30,14 +30,16 @@ func showVersion() {
 func main() {
 	srm.InitCache()
 
-	helpFlag := flag.BoolP("help", "h", false, "Print this help output.")
+	helpFlag := flag.BoolP("help", "h", false, "print this help output.")
 	versionFlag := flag.BoolP("version", "V", false, "print srm version.")
-	cleanCacheFlag := flag.StringP("clean", "c", "", "Clean the cache dir (options: auto,all).")
-	recursiveFlag := flag.BoolP("recursive", "r", false, "Remove recursively.")
-	forceFlag := flag.BoolP("force", "f", false, "Remove a write-protected file.")
-	listCacheFlag := flag.BoolP("list-cache", "l", false, "List recent removed files.")
-	listAllCacheFlag := flag.BoolP("list-all-cache", "a", false, "List all removed files.")
-	recoverFileFlag := flag.IntSliceP("recover", "s", nil, "Recover a removed file(s) from the index list-cache.\nSeperate numbers by commas (,) no spaces.")
+	cleanCacheFlag := flag.StringP("clean", "c", "", "clean the cache dir (options: auto,all).")
+	recursiveFlag := flag.BoolP("recursive", "r", false, "remove recursively.")
+	forceFlag := flag.BoolP("force", "f", false, "remove a write-protected file.")
+	listCacheFlag := flag.BoolP("list-cache", "l", false, "list recent removed files.")
+	listAllCacheFlag := flag.BoolP("list-all-cache", "a", false, "list all removed files.")
+	sortBySizeFlag := flag.BoolP("size", "S", false, "sort the cache list by size.")
+	sortByTimeFlag := flag.BoolP("time", "t", false, "sort the cache list by time.")
+	recoverFileFlag := flag.IntSliceP("recover", "s", nil, "recover a removed file(s) from the index list-cache.\nseperate numbers by commas (,) no spaces.")
 
 	flag.Parse()
 	args := flag.Args()
@@ -83,7 +85,11 @@ func main() {
 
 	// List all cache flag
 	if *listAllCacheFlag {
-		fmt.Println("Not yet...")
+		err := srm.ListAllCache(*sortBySizeFlag, *sortByTimeFlag)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
+			os.Exit(1)
+		}
 		os.Exit(0)
 	}
 

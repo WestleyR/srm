@@ -2,7 +2,7 @@
 //  log.go
 //  srm - https://github.com/WestleyR/srm
 //
-// Created by WestleyR on July 28, 2020
+// Created by WestleyR <westleyr@nym.hush.com> on July 28, 2020
 // Source code: https://github.com/WestleyR/srm
 //
 // Copyright (c) 2020-2021 WestleyR. All rights reserved.

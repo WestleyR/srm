@@ -2,7 +2,7 @@
 //  list.go
 //  srm - https://github.com/WestleyR/srm
 //
-// Created by WestleyR on July 29, 2020
+// Created by WestleyR <westleyr@nym.hush.com> on July 29, 2020
 // Source code: https://github.com/WestleyR/srm
 //
 // Copyright (c) 2020-2021 WestleyR. All rights reserved.
@@ -31,6 +31,159 @@ const (
 	colorWhite  string = "\x1b[37m"
 	colorReset  string = "\x1b[0m"
 )
+
+type cacheList struct {
+	name string
+	index int
+	size int64
+	time int64
+}
+
+func getDirSize(path string) int64 {
+	var size int64
+
+	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() {
+			size += info.Size()
+		}
+		return nil
+	})
+	if err != nil {
+		size = -1
+	}
+
+	return size
+}
+
+func getCacheArray(path string) ([]cacheList, error) {
+	var cache []cacheList
+
+	// Get the last cache number
+	items, _ := ioutil.ReadDir(path)
+	for _, item := range items {
+		if item.IsDir() {
+			cachePath := filepath.Join(path, item.Name())
+			index, _ := strconv.Atoi(item.Name())
+			item := cacheList{
+				name: cachePath,
+				index: index,
+				size: getDirSize(cachePath),
+				time: item.ModTime().UnixNano(),
+			}
+			cache = append(cache, item)
+		} else {
+			// TODO: handle file there
+			//fmt.Println(item.Name())
+		}
+	}
+
+	return cache, nil
+}
+
+func sortBySize(cache []cacheList) error {
+	sorting := true
+
+	for sorting {
+		sorting = false
+		for i := 0; i < len(cache)-1; i++ {
+			if cache[i].size > cache[i+1].size {
+				tmp := cache[i]
+				cache[i] = cache[i+1]
+				cache[i+1] = tmp
+				sorting = true
+			}
+		}
+	}
+
+	return nil
+}
+
+func sortByName(cache []cacheList) error {
+	sorting := true
+
+	for sorting {
+		sorting = false
+		for i := 0; i < len(cache)-1; i++ {
+			if cache[i].index > cache[i+1].index {
+				tmp := cache[i]
+				cache[i] = cache[i+1]
+				cache[i+1] = tmp
+				sorting = true
+			}
+		}
+	}
+
+	return nil
+}
+
+func sortByTime(cache []cacheList) error {
+	sorting := true
+
+	for sorting {
+		sorting = false
+		for i := 0; i < len(cache)-1; i++ {
+			if cache[i].time > cache[i+1].time {
+				tmp := cache[i]
+				cache[i] = cache[i+1]
+				cache[i+1] = tmp
+				sorting = true
+			}
+		}
+	}
+
+	return nil
+}
+
+// TODO: cleanup args, like pass the sorting func.
+func ListAllCache(bySize, byTime bool) error {
+	sortingFunc := sortByName
+	if bySize {
+		sortingFunc = sortBySize
+	} else if byTime {
+		sortingFunc = sortByTime
+	}
+
+	path := getCachePath()
+
+	cache, _ := getCacheArray(path)
+
+	sortingFunc(cache)
+
+	for _, f := range cache {
+	//for i := 0; i <= maxItems; i++ {
+		trashPath := f.name
+		files, err := ioutil.ReadDir(trashPath)
+		if err != nil {
+			// TODO: if debug is true, then print this
+			//fmt.Fprintf(os.Stderr, "failed to open: %s\n", trashPath)
+		} else {
+			trashName := colorRed + "[no items]" + colorReset
+			colorDir := false
+			if len(files) != 0 {
+				trashName = files[0].Name()
+				if isPathADir(filepath.Join(trashPath, trashName)) {
+					// Trash item is a directory
+					colorDir = true
+				}
+			}
+			fileDate := getFileDate(trashPath)
+			fmt.Printf("%d: %s(%s)%s %s%s/%s", f.index, colorTeal, fileDate, colorReset, colorPink, trashPath, colorReset)
+			if colorDir {
+				fmt.Printf("%s%s%s", colorBlue, trashName, colorReset)
+			} else {
+				fmt.Printf("%s", trashName)
+			}
+			fmt.Printf(" %s\n", getTrashFileNumberSizeFormat(filepath.Join(trashPath, trashName)))
+		}
+	}
+
+	return nil
+}
+
+// TODO: need to cleanup the following functions
 
 func getFileDate(path string) string {
 	fileDate := ""

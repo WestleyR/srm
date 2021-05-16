@@ -14,12 +14,11 @@
 PREFIX = /usr/local
 
 TARGET = srm
-TARGET_VERSION = 2.0.1
 
 GO = go
 GOFLAGS = -ldflags -w
 
-SRC = $(wildcard ./*.go)
+SRC = $(shell find $(SOURCEDIR) ./ -name '*.go')
 
 .PHONY:
 all: $(TARGET)
