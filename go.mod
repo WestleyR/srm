@@ -1,8 +1,6 @@
 module github.com/WestleyR/srm
 
-go 1.13
-
-replace github.com/WestleyR/srm/internal/srm => ./internal/srm
+go 1.16
 
 require (
 	github.com/spf13/pflag v1.0.5
