@@ -21,19 +21,24 @@ import (
 	"strconv"
 )
 
+const autocleanSizeLimit = 15024 * 1024 // 5Mbs
+
+// CleanCacheAUTO will remove all cached items above autocleanSizeLimit.
 func CleanCacheAUTO() error {
 	path := getCachePath()
 
-	// First get the max entities in the cache dir
-	// TODO: error check
-	files, _ := ioutil.ReadDir(path)
-	maxItems := len(files)
+	cache, _ := getCacheArray(path)
 
-	for i := 0; i < maxItems-10; i++ {
-		trashPath := filepath.Join(path, strconv.Itoa(i))
-		//files, err := ioutil.ReadDir(trashPath)
+	sortBySize(cache)
 
-		fmt.Println("File to remove: ", trashPath)
+	lastCleanedSize := cache[len(cache)-1].size
+
+	for i := len(cache)-1; i > 0; i-- {
+		if lastCleanedSize < autocleanSizeLimit {
+			break
+		}
+		fmt.Printf("Would remove: %s -> %s\n", cache[i].name, formatBytesToStr(cache[i].size))
+		lastCleanedSize = cache[i].size
 	}
 
 	return nil

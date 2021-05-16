@@ -153,7 +153,6 @@ func ListAllCache(bySize, byTime bool) error {
 	sortingFunc(cache)
 
 	for _, f := range cache {
-	//for i := 0; i <= maxItems; i++ {
 		trashPath := f.name
 		files, err := ioutil.ReadDir(trashPath)
 		if err != nil {
