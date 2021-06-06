@@ -13,4 +13,7 @@
  - [ ] Add more tests
  - [ ] Add option to disable color
  - [x] Recover option should be able to accept more then one number
+ - [x] Should also autoremove files under 100 bytes
+ - [ ] Make srm quicker, like remember the last cached file, and use a file to cache it
+ - [ ] Make sure only 1 file per trash index path
 

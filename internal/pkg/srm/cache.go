@@ -21,25 +21,38 @@ import (
 	"strconv"
 )
 
-const autocleanSizeLimit = 15024 * 1024 // 5Mbs
+const AutocleanSizeLimit = 15024 * 1024 // 15Mbs
+const AutocleanSizeLower = 100 // 100b
 
-// CleanCacheAUTO will remove all cached items above autocleanSizeLimit.
-func CleanCacheAUTO() error {
+// CleanCacheAUTO will remove all cached items above autocleanSizeLimit,
+// and below autocleanSizeLower.
+func CleanCacheAUTO(dryRun bool) error {
 	path := getCachePath()
 
 	cache, _ := getCacheArray(path)
 
-	sortBySize(cache)
+	var totalCleanedMbs float32
 
-	lastCleanedSize := cache[len(cache)-1].size
-
-	for i := len(cache)-1; i > 0; i-- {
-		if lastCleanedSize < autocleanSizeLimit {
-			break
+	for _, c := range cache {
+		if c.size > AutocleanSizeLimit || c.size < AutocleanSizeLower {
+			if dryRun {
+				fmt.Printf("Would remove: %s -> %s\n", c.name, FormatBytesToStr(c.size))
+			} else {
+				fmt.Printf("Removing: %s (%s) ...\n", c.name, FormatBytesToStr(c.size))
+				err := os.RemoveAll(c.name)
+				if err != nil {
+					return fmt.Errorf("failed to autoclean: %s", err)
+				}
+			}
+			totalCleanedMbs += float32(c.size / 1000024)
 		}
-		fmt.Printf("Would remove: %s -> %s\n", cache[i].name, formatBytesToStr(cache[i].size))
-		lastCleanedSize = cache[i].size
 	}
+
+	spaceSavedFmt := "Would save %dMbs of space\n"
+	if !dryRun {
+		spaceSavedFmt = "Saved %dMbs of space\n"
+	}
+	fmt.Printf(spaceSavedFmt, int(totalCleanedMbs))
 
 	return nil
 }

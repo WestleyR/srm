@@ -61,7 +61,6 @@ func getDirSize(path string) int64 {
 func getCacheArray(path string) ([]cacheList, error) {
 	var cache []cacheList
 
-	// Get the last cache number
 	items, _ := ioutil.ReadDir(path)
 	for _, item := range items {
 		if item.IsDir() {
@@ -232,7 +231,7 @@ func getTrashFileNumberSizeFormat(path string) string {
 		if somethingToPrint {
 			fmtStr += ", "
 		}
-		fmtStr += formatBytesToStr(size)
+		fmtStr += FormatBytesToStr(size)
 		somethingToPrint = true
 	}
 	fmtStr += "]" + colorReset
@@ -244,12 +243,14 @@ func getTrashFileNumberSizeFormat(path string) string {
 	return fmtStr
 }
 
-func formatBytesToStr(b int64) string {
+// TODO: need to have a util package
+func FormatBytesToStr(b int64) string {
 	const unit = 1000
-	if b < unit {
-		return fmt.Sprintf("%d B", b)
-	}
-	div, exp := int64(unit), 0
+//	if b < unit {
+//		return fmt.Sprintf("%d B", b)
+//	}
+	div := int64(unit)
+	exp := 0
 	for n := b / unit; n >= unit; n /= unit {
 		div *= unit
 		exp++
@@ -259,36 +260,14 @@ func formatBytesToStr(b int64) string {
 
 func ListRecentCache() error {
 	path := getCachePath()
+	cache, _ := getCacheArray(path)
+	sortByTime(cache)
 
-	// Get the last cache number
-	maxItems := 0
-	items, _ := ioutil.ReadDir(path)
-	for _, item := range items {
-		if item.IsDir() {
-			maxItems++
-		} else {
-			// TODO: handle file there
-			fmt.Println(item.Name())
-		}
-	}
+	cacheLen := len(cache) - 1
 
-	fullPath := filepath.Join(path, strconv.Itoa(maxItems))
-
-	// Make sure no more exist, sometimes when one of the cache dirs is
-	// removed, it can screw up the last number. Only try 100 times
-	// TODO: add debug here...
-	for i := 0; i < 100; i++ {
-		if doesFileExists(fullPath) {
-			// File already exists, then add incremt again...
-			maxItems++
-			fullPath = filepath.Join(path, strconv.Itoa(maxItems))
-		} else {
-			break
-		}
-	}
-
-	for i := maxItems - 10; i <= maxItems; i++ {
-		trashPath := filepath.Join(path, strconv.Itoa(i))
+	for i := cacheLen-9; i <= cacheLen; i++ {
+		f := cache[i]
+		trashPath := f.name
 		files, err := ioutil.ReadDir(trashPath)
 		if err != nil {
 			// TODO: if debug is true, then print this
@@ -304,7 +283,7 @@ func ListRecentCache() error {
 				}
 			}
 			fileDate := getFileDate(trashPath)
-			fmt.Printf("%d: %s(%s)%s %s%s/%s", i, colorTeal, fileDate, colorReset, colorPink, trashPath, colorReset)
+			fmt.Printf("%d: %s(%s)%s %s%s/%s", f.index, colorTeal, fileDate, colorReset, colorPink, trashPath, colorReset)
 			if colorDir {
 				fmt.Printf("%s%s%s", colorBlue, trashName, colorReset)
 			} else {
