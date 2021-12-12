@@ -16,4 +16,7 @@
  - [x] Should also autoremove files under 100 bytes
  - [ ] Make srm quicker, like remember the last cached file, and use a file to cache it
  - [ ] Make sure only 1 file per trash index path
+ - [ ] Better format of bytes (autoclean)
+ - [ ] Use better sorting func defining
+ - [ ] Use common failWithError function (cli command code section)
 

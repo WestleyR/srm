@@ -21,6 +21,7 @@ import (
 	"strconv"
 )
 
+//nolint:deadcode,varcheck
 const (
 	colorRed    string = "\x1b[31m"
 	colorGreen  string = "\x1b[32m"
@@ -33,10 +34,10 @@ const (
 )
 
 type cacheList struct {
-	name string
+	name  string
 	index int
-	size int64
-	time int64
+	size  int64
+	time  int64
 }
 
 func getDirSize(path string) int64 {
@@ -67,13 +68,13 @@ func getCacheArray(path string) ([]cacheList, error) {
 			cachePath := filepath.Join(path, item.Name())
 			index, _ := strconv.Atoi(item.Name())
 			item := cacheList{
-				name: cachePath,
+				name:  cachePath,
 				index: index,
-				size: getDirSize(cachePath),
-				time: item.ModTime().UnixNano(),
+				size:  getDirSize(cachePath),
+				time:  item.ModTime().UnixNano(),
 			}
 			cache = append(cache, item)
-		} else {
+		} else { //nolint:staticcheck // until TODO is fixed
 			// TODO: handle file there
 			//fmt.Println(item.Name())
 		}
@@ -82,7 +83,7 @@ func getCacheArray(path string) ([]cacheList, error) {
 	return cache, nil
 }
 
-func sortBySize(cache []cacheList) error {
+func sortBySize(cache []cacheList) {
 	sorting := true
 
 	for sorting {
@@ -96,11 +97,9 @@ func sortBySize(cache []cacheList) error {
 			}
 		}
 	}
-
-	return nil
 }
 
-func sortByName(cache []cacheList) error {
+func sortByName(cache []cacheList) {
 	sorting := true
 
 	for sorting {
@@ -114,11 +113,9 @@ func sortByName(cache []cacheList) error {
 			}
 		}
 	}
-
-	return nil
 }
 
-func sortByTime(cache []cacheList) error {
+func sortByTime(cache []cacheList) {
 	sorting := true
 
 	for sorting {
@@ -132,8 +129,6 @@ func sortByTime(cache []cacheList) error {
 			}
 		}
 	}
-
-	return nil
 }
 
 // TODO: cleanup args, like pass the sorting func.
@@ -246,9 +241,9 @@ func getTrashFileNumberSizeFormat(path string) string {
 // TODO: need to have a util package
 func FormatBytesToStr(b int64) string {
 	const unit = 1000
-//	if b < unit {
-//		return fmt.Sprintf("%d B", b)
-//	}
+	//	if b < unit {
+	//		return fmt.Sprintf("%d B", b)
+	//	}
 	div := int64(unit)
 	exp := 0
 	for n := b / unit; n >= unit; n /= unit {
@@ -265,7 +260,11 @@ func ListRecentCache() error {
 
 	cacheLen := len(cache) - 1
 
-	for i := cacheLen-9; i <= cacheLen; i++ {
+	for i := cacheLen - 9; i <= cacheLen; i++ {
+		if i < 0 {
+			// If less then 10 cached items, then skip the non-existent files
+			continue
+		}
 		f := cache[i]
 		trashPath := f.name
 		files, err := ioutil.ReadDir(trashPath)

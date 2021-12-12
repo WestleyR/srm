@@ -60,10 +60,7 @@ func isPathADirectory(path string) bool {
 
 func checkIfFileIsWriteProtected(file string) bool {
 	err := unix.Access(file, unix.W_OK)
-	if os.IsPermission(err) {
-		return false
-	}
-	return true
+	return !os.IsPermission(err)
 }
 
 func checkForWriteProtectedFileIn(path string) error {

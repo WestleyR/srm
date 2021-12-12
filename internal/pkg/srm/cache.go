@@ -22,7 +22,7 @@ import (
 )
 
 const AutocleanSizeLimit = 15024 * 1024 // 15Mbs
-const AutocleanSizeLower = 100 // 100b
+const AutocleanSizeLower = 100          // 100b
 
 // CleanCacheAUTO will remove all cached items above autocleanSizeLimit,
 // and below autocleanSizeLower.

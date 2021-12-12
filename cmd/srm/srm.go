@@ -21,7 +21,7 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-const srmVersion = "v2.1.0"
+const srmVersion = "v2.1.1"
 
 func showVersion() {
 	fmt.Printf("%s\n", srmVersion)
@@ -34,8 +34,8 @@ func main() {
 	versionFlag := flag.BoolP("version", "V", false, "print srm version.")
 	cleanCacheFlag := flag.StringP("clean", "c", "",
 		fmt.Sprintf("clean the cache dir (options: auto,all).\nauto clean removes all files over %s and under %s",
-		srm.FormatBytesToStr(srm.AutocleanSizeLimit),
-		srm.FormatBytesToStr(srm.AutocleanSizeLower)))
+			srm.FormatBytesToStr(srm.AutocleanSizeLimit),
+			srm.FormatBytesToStr(srm.AutocleanSizeLower)))
 	dryRunFlag := flag.BoolP("dry-run", "n", false, "dry run when removing files or cleaning (WIP).")
 	recursiveFlag := flag.BoolP("recursive", "r", false, "remove recursively.")
 	forceFlag := flag.BoolP("force", "f", false, "remove a write-protected file.")
@@ -83,7 +83,11 @@ func main() {
 
 	// List cache flag
 	if *listCacheFlag {
-		srm.ListRecentCache()
+		err := srm.ListRecentCache()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
+			os.Exit(1)
+		}
 		os.Exit(0)
 	}
 
