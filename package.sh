@@ -26,9 +26,9 @@ mkdir -p macos/srm/${TARGET_VERSION}/bin
 mkdir -p armv6l/srm/${TARGET_VERSION}/bin
 
 # Compile for a couple common os/arch
-GOOS=linux GOARCH=amd64 $GO_CMD build $GO_FLAGS -o srm_linux_amd64 ../cmd/srm/srm.go
-GOOS=darwin GOARCH=amd64 $GO_CMD build $GO_FLAGS -o srm_darwin_amd64 ../cmd/srm/srm.go
-GOOS=linux GOARCH=arm GOARM=5 $GO_CMD build $GO_FLAGS -o srm_linux_arm ../cmd/srm/srm.go
+GOOS=linux GOARCH=amd64 $GO_CMD build $GO_FLAGS -o srm_linux_amd64 ../cmd/srm/main.go
+GOOS=darwin GOARCH=amd64 $GO_CMD build $GO_FLAGS -o srm_darwin_amd64 ../cmd/srm/main.go
+GOOS=linux GOARCH=arm GOARM=5 $GO_CMD build $GO_FLAGS -o srm_linux_arm ../cmd/srm/main.go
 
 # Copy the compiled binaries to the tarball dirs
 mv srm_linux_amd64 x86_64_linux/srm/${TARGET_VERSION}/bin/srm
