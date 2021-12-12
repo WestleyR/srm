@@ -1,6 +1,5 @@
 # Safe Remove (`rm`) command with cache/undo
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/WestleyR/srm)](https://goreportcard.com/report/github.com/WestleyR/srm)
 [![made-with-Go](https://img.shields.io/badge/Made%20with-Go-1f425f.svg)](http://golang.org)
 [![GitHub release](https://img.shields.io/github/release/WestleyR/srm.svg)](https://GitHub.com/WestleyR/srm/releases/)
 [![Github all releases](https://img.shields.io/github/downloads/WestleyR/srm/total.svg)](https://GitHub.com/WestleyR/srm/releases/)
@@ -8,8 +7,6 @@
 This is a `rm` command imitation, but without actually removing anything, only
 moving it into cache (`~/.cache/srm`). By doing this, you can recover
 accidentally-removed files.
-
-_undo/list command still WIP..._
 
 ## Install
 
@@ -23,13 +20,7 @@ If you have go installed, then you can run:
 $ go get -u github.com/WestleyR/srm/cmd/srm
 ```
 
-Or install via package manager ([gpack](https://github.com/WestleyR/gpack)):
-
-```
-$ gpack install WestleyR/srm
-```
-
-Or by the original way:
+Or via clone::
 
 ```
 git clone https://github.com/WestleyR/srm

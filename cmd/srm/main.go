@@ -1,5 +1,5 @@
 //
-//  srm.go
+//  main.go
 //  srm - https://github.com/WestleyR/srm
 //
 // Created by WestleyR <westleyr@nym.hush.com> on July 28, 2020
