@@ -5,7 +5,7 @@
 // Created by WestleyR <westleyr@nym.hush.com> on July 28, 2020
 // Source code: https://github.com/WestleyR/srm
 //
-// Copyright (c) 2020-2021 WestleyR. All rights reserved.
+// Copyright (c) 2020-2022 WestleyR. All rights reserved.
 // This software is licensed under a BSD 3-Clause Clear License.
 // Consult the LICENSE file that came with this software regarding
 // your rights to distribute this software.
@@ -15,13 +15,14 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/WestleyR/srm/internal/pkg/srm"
 	flag "github.com/spf13/pflag"
 )
 
-const srmVersion = "v2.1.1"
+const srmVersion = "v2.2.0-20220424"
 
 func showVersion() {
 	fmt.Printf("%s\n", srmVersion)
@@ -50,7 +51,7 @@ func main() {
 
 	// Help flag
 	if *helpFlag {
-		fmt.Printf("Copyright (c) 2020-2021 WestleyR. All rights reserved.\n")
+		fmt.Printf("Copyright (c) 2020-2022 WestleyR. All rights reserved.\n")
 		fmt.Printf("This software is licensed under the terms of The Clear BSD License.\n")
 		fmt.Printf("Source code: https://github.com/WestleyR/srm\n")
 		fmt.Printf("\n")
@@ -122,14 +123,19 @@ func main() {
 	}
 
 	// If not doing anything else, then remove the files passed
-	var options srm.SrmOptions
+	options := &srm.Options{}
 	options.Force = *forceFlag
 	options.Recursive = *recursiveFlag
 
 	exitCode := 0
 
+	srmManager, err := srm.New(options)
+	if err != nil {
+		log.Fatalf("Failed to init srm manager: %s", err)
+	}
+
 	for _, f := range args {
-		err := srm.SrmFile(f, options)
+		err := srmManager.RM(f)
 		if err != nil {
 			// Error should be already formatted
 			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
