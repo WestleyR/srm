@@ -16,6 +16,7 @@ package srm
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 
@@ -65,40 +66,25 @@ func (m *Manager) RM(filePath string) error {
 		return fmt.Errorf("failed to create trash dir: %s", err)
 	}
 
-	if isPathADirectory(filePath) {
-		// Is a directory
-
-		if !m.options.Recursive {
-			return fmt.Errorf("%s: is a directory", filePath)
-		}
-
-		if !m.options.Force {
-			err := checkForWriteProtectedFileIn(filePath)
-			if err != nil {
-				return err
-			}
-		}
-
-		// Move the file to srm trash
-		err := os.Rename(filePath, trashPath)
-		if err != nil {
-			return err
-		}
-	} else {
-		// Its a plain file
-
-		if !m.options.Force {
-			if !checkIfFileIsWriteProtected(filePath) {
-				return fmt.Errorf("%s: is write protected", filePath)
-			}
-		}
-
-		// Move the file to srm trash
-		err := os.Rename(filePath, trashPath)
-		if err != nil {
-			return err
-		}
+        // Is a directory
+	if isPathADirectory(filePath) && !m.options.Recursive {
+	    return fmt.Errorf("%s: is a directory", filePath)
 	}
+
+        if !m.options.Force && !checkIfFileIsWriteProtected(filePath) {
+            return fmt.Errorf("%s: is write protected", filePath)
+	}
+
+	// Move the file to srm trash
+	err = os.Rename(filePath, trashPath)
+	if err != nil {
+            cmd := exec.Command("mv", filePath, trashPath)
+	    err = cmd.Run()
+            if err != nil {
+                return fmt.Errorf("%s: failed to move to trash directory %s", filePath, trashPath)
+            }
+        }
+
 	m.trashIndex++
 
 	return nil
