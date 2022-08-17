@@ -17,6 +17,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 )
@@ -52,7 +53,11 @@ func RecoverFileFromTrashIndex(trashIndex int) error {
 
 	err = os.Rename(fullTrashFile, fileName)
 	if err != nil {
-		return err
+	    cmd := exec.Command("mv", fullTrashFile, fileName)
+	    err = cmd.Run()
+            if err != nil {
+                return fmt.Errorf("%s: failed to recover the current directory from %s", fileName, fullTrashFile)
+            }
 	}
 
 	fmt.Printf("File %s has been recovered to the current directory as: %s\n", files[0].Name(), fileName)
