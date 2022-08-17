@@ -19,51 +19,48 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+
+	"github.com/WestleyR/srm/internal/pkg/paths"
+	"github.com/wildwest-productions/goini"
 )
 
-const AutocleanSizeLimit = 15024 * 1024 // 15Mbs
-const AutocleanSizeLower = 100          // 100b
+// TODO: the following two functions are not used. This may be used later...
 
-// CleanCacheAUTO will remove all cached items above autocleanSizeLimit,
-// and below autocleanSizeLower.
-func CleanCacheAUTO(dryRun bool) error {
-	path := getCachePath()
+func (m *Manager) loadDataCache() error {
+	dc := &DataCache{}
 
-	cache, _ := getCacheArray(path)
-
-	var totalCleanedMbs float32
-
-	for _, c := range cache {
-		if c.size > AutocleanSizeLimit || c.size < AutocleanSizeLower {
-			if dryRun {
-				fmt.Printf("Would remove: %s -> %s\n", c.name, FormatBytesToStr(c.size))
-			} else {
-				fmt.Printf("Removing: %s (%s) ...\n", c.name, FormatBytesToStr(c.size))
-				err := os.RemoveAll(c.name)
-				if err != nil {
-					return fmt.Errorf("failed to autoclean: %s", err)
-				}
-			}
-			totalCleanedMbs += float32(c.size / 1000024)
-		}
+	b, err := os.ReadFile(m.dataCacheFile)
+	if err != nil {
+		// TODO: need to check os.IsNotExist
+		return nil
 	}
 
-	spaceSavedFmt := "Would save %dMbs of space\n"
-	if !dryRun {
-		spaceSavedFmt = "Saved %dMbs of space\n"
+	err = goini.Unmarshal(b, &dc)
+	if err != nil {
+		return err
 	}
-	fmt.Printf(spaceSavedFmt, int(totalCleanedMbs))
+
+	m.DataCache = dc
 
 	return nil
 }
 
-func doesFileExists(path string) bool {
-	_, err := os.Stat(path)
-	return !os.IsNotExist(err)
+func (m *Manager) Write(path string) error {
+	b, err := goini.Marshal(m.DataCache)
+	if err != nil {
+		return fmt.Errorf("failed to marshal ini: %s", err)
+	}
+
+	err = os.WriteFile(path, b, 0700)
+	if err != nil {
+		return fmt.Errorf("failed to write file: %s", err)
+	}
+
+	return nil
 }
 
 func getNextTrashIndex() (int32, error) {
-	cachePath := getCachePath()
+	cachePath := paths.GetTrashDirPath()
 
 	cacheNumber := int32(0)
 
@@ -82,7 +79,7 @@ func getNextTrashIndex() (int32, error) {
 	// when one of the cache dirs is removed, it can
 	// screw up the last number. Only try 100 times
 	for true {
-		if doesFileExists(fullPath) {
+		if doesPathExist(fullPath) {
 			// File already exists, then add incremt again...
 			cacheNumber++
 			fullPath = filepath.Join(cachePath, strconv.FormatInt(int64(cacheNumber), 10))
@@ -94,22 +91,11 @@ func getNextTrashIndex() (int32, error) {
 	return cacheNumber, nil
 }
 
-func getSrmCacheDir() string {
-	home := os.Getenv("HOME")
-	return filepath.Join(home, ".cache/srm2")
-}
-
-func getCachePath() string {
-	home := getSrmCacheDir()
-
-	return filepath.Join(home, "trash")
-}
-
 func InitCache() {
-	cachePath := getCachePath()
+	cachePath := paths.GetTrashDirPath()
 
 	err := os.MkdirAll(cachePath, 0700)
 	if err != nil {
-		fmt.Printf("ERROR: %v", err)
+		panic(fmt.Sprintf("failed to create dir: %s", err))
 	}
 }

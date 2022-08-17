@@ -34,8 +34,8 @@ install: $(TARGET)
 	mkdir -p $(PREFIX)/bin
 	cp -f $(TARGET) $(PREFIX)/bin
 
-package: $(SRC)
-	TARGET_VERSION=$(TARGET_VERSION) ./package.sh
+package: $(TARGET)
+	TARGET_VERSION=$(shell ./srm --version) ./package.sh
 
 clean:
 	rm -f $(TARGET)

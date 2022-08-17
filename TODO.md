@@ -14,9 +14,15 @@
  - [ ] Add option to disable color
  - [x] Recover option should be able to accept more then one number
  - [x] Should also autoremove files under 100 bytes
- - [ ] Make srm quicker, like remember the last cached file, and use a file to cache it
- - [ ] Make sure only 1 file per trash index path
- - [ ] Better format of bytes (autoclean)
+ - [x] Make sure only 1 file per trash index path
+ - [x] Better format of bytes (autoclean)
  - [ ] Use better sorting func defining
- - [ ] Use common failWithError function (cli command code section)
+ - [ ] Autocleaning should have an option to remove binary (non ascii) files
+ - [x] Caching should make sub-directories every day (eg. ~/.cache/srm/trash/2022/04/20/[0,1,2,3,4,5,6,7,8...])
+ - [ ] Autocleaning should remove month-old files
+ - [ ] Eventally, autocleaning should run if needed during running if total space is grader than an amount
+ - [ ] Should keep a track file of the total space used in a ini format so users can also see it (this way it will
+       be easy to know when to run the autocleaning, see todo item above)
+ - [ ] Should have a `SRM_TRASH` env var or something to specify the trash path
+ - [x] Should support the `--` for end of flags and start of arguments (already handled by cli library)
 

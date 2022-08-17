@@ -22,7 +22,7 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-const srmVersion = "v2.2.0-20220424"
+const srmVersion = "v2.2.2"
 
 func showVersion() {
 	fmt.Printf("%s\n", srmVersion)
@@ -36,9 +36,12 @@ func main() {
 	cleanCacheFlag := flag.StringP("clean", "c", "",
 		fmt.Sprintf("clean the cache dir (options: auto,all).\nauto clean removes all files over %s and under %s",
 			srm.FormatBytesToStr(srm.AutocleanSizeLimit),
-			srm.FormatBytesToStr(srm.AutocleanSizeLower)))
+			srm.FormatBytesToStr(srm.AutocleanSizeLower),
+		),
+	)
 	dryRunFlag := flag.BoolP("dry-run", "n", false, "dry run when removing files or cleaning (WIP).")
 	recursiveFlag := flag.BoolP("recursive", "r", false, "remove recursively.")
+	emptyDirFlag := flag.BoolP("dir", "d", false, "remove empty directory (WIP).")
 	forceFlag := flag.BoolP("force", "f", false, "remove a write-protected file.")
 	listCacheFlag := flag.BoolP("list-cache", "l", false, "list recent removed files.")
 	listAllCacheFlag := flag.BoolP("list-all-cache", "a", false, "list all removed files.")
@@ -67,14 +70,15 @@ func main() {
 
 	// Clean cache flag
 	if *cleanCacheFlag != "" {
-		if *cleanCacheFlag == "auto" {
+		switch *cleanCacheFlag {
+		case "auto":
 			if err := srm.CleanCacheAUTO(*dryRunFlag); err != nil {
 				fmt.Fprintf(os.Stderr, "%s: failed to clean cache: %s\n", os.Args[0], err)
 				os.Exit(1)
 			}
-		} else if *cleanCacheFlag == "all" {
+		case "all":
 			fmt.Println("Not yet...")
-		} else {
+		default:
 			fmt.Fprintf(os.Stderr, "%s: invalid option for --clean: %s\n", os.Args[0], *cleanCacheFlag)
 			os.Exit(1)
 		}
@@ -126,6 +130,7 @@ func main() {
 	options := &srm.Options{}
 	options.Force = *forceFlag
 	options.Recursive = *recursiveFlag
+	options.RemoveEmptyDir = *emptyDirFlag
 
 	exitCode := 0
 

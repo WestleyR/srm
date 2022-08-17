@@ -1,6 +1,10 @@
 # github.com/spf13/pflag v1.0.5
 ## explicit
 github.com/spf13/pflag
+# github.com/wildwest-productions/goini v0.0.0-20211212231729-5862de93cb20
+## explicit
+github.com/wildwest-productions/goini
+github.com/wildwest-productions/goini/internal/pkg/parser
 # golang.org/x/sys v0.0.0-20211210111614-af8b64212486
 ## explicit
 golang.org/x/sys/internal/unsafeheader

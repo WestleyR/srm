@@ -20,10 +20,12 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strconv"
+
+	"github.com/WestleyR/srm/internal/pkg/paths"
 )
 
 func RecoverFileFromTrashIndex(trashIndex int) error {
-	path := getCachePath()
+	path := paths.GetTrashDirPath()
 
 	trashPath := filepath.Join(path, strconv.Itoa(trashIndex))
 	files, err := ioutil.ReadDir(trashPath)

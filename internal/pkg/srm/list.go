@@ -19,6 +19,8 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+
+	"github.com/WestleyR/srm/internal/pkg/paths"
 )
 
 //nolint:deadcode,varcheck
@@ -83,6 +85,8 @@ func getCacheArray(path string) ([]cacheList, error) {
 	return cache, nil
 }
 
+type SortingFunc func([]cacheList)
+
 func sortBySize(cache []cacheList) {
 	sorting := true
 
@@ -133,6 +137,16 @@ func sortByTime(cache []cacheList) {
 
 // TODO: cleanup args, like pass the sorting func.
 func ListAllCache(bySize, byTime bool) error {
+	// TODO: fixme
+	path := filepath.Dir(filepath.Dir(paths.GetTrashDirPath()))
+
+	years, err := ioutil.ReadDir(path)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("PATH:", path)
+
 	sortingFunc := sortByName
 	if bySize {
 		sortingFunc = sortBySize
@@ -140,8 +154,23 @@ func ListAllCache(bySize, byTime bool) error {
 		sortingFunc = sortByTime
 	}
 
-	path := getCachePath()
+	for _, y := range years {
+		months, err := ioutil.ReadDir(filepath.Join(path, y.Name()))
+		if err != nil {
+			return err
+		}
 
+		for _, m := range months {
+			if isPathADir(filepath.Join(path, y.Name(), m.Name())) {
+				formatTrashDirContents(filepath.Join(path, y.Name(), m.Name()), sortingFunc)
+			}
+		}
+	}
+
+	return nil
+}
+
+func formatTrashDirContents(path string, sortingFunc SortingFunc) error {
 	cache, _ := getCacheArray(path)
 
 	sortingFunc(cache)
@@ -163,7 +192,7 @@ func ListAllCache(bySize, byTime bool) error {
 				}
 			}
 			fileDate := getFileDate(trashPath)
-			fmt.Printf("%d: %s(%s)%s %s%s/%s", f.index, colorTeal, fileDate, colorReset, colorPink, trashPath, colorReset)
+			fmt.Printf("%s(%s)%s %s%s/%s", colorTeal, fileDate, colorReset, colorPink, trashPath, colorReset)
 			if colorDir {
 				fmt.Printf("%s%s%s", colorBlue, trashName, colorReset)
 			} else {
@@ -175,8 +204,6 @@ func ListAllCache(bySize, byTime bool) error {
 
 	return nil
 }
-
-// TODO: need to cleanup the following functions
 
 func getFileDate(path string) string {
 	fileDate := ""
@@ -238,23 +265,20 @@ func getTrashFileNumberSizeFormat(path string) string {
 	return fmtStr
 }
 
-// TODO: need to have a util package
 func FormatBytesToStr(b int64) string {
 	const unit = 1000
-	//	if b < unit {
-	//		return fmt.Sprintf("%d B", b)
-	//	}
 	div := int64(unit)
 	exp := 0
 	for n := b / unit; n >= unit; n /= unit {
 		div *= unit
 		exp++
 	}
+
 	return fmt.Sprintf("%.1f %cB", float64(b)/float64(div), "kMGTPE"[exp])
 }
 
 func ListRecentCache() error {
-	path := getCachePath()
+	path := paths.GetTrashDirPath()
 	cache, _ := getCacheArray(path)
 	sortByTime(cache)
 
