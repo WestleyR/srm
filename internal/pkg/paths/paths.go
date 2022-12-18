@@ -13,7 +13,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"time"
 )
 
 var homeDir string = ""
@@ -23,7 +22,7 @@ func GetHome() string {
 		var err error
 		homeDir, err = os.UserHomeDir()
 		if err != nil {
-			panic(fmt.Sprintf("failed to get home dir (please report): %s", err))
+			panic(fmt.Sprintf("failed to get home dir: %s", err))
 		}
 	}
 
@@ -34,17 +33,10 @@ func GetCachePath() string {
 	return filepath.Join(GetHome(), ".cache", "srm")
 }
 
-func GetDataCachePath() string {
-	return filepath.Join(GetCachePath(), "data-cache.ini")
+func GetDataCacheFile() string {
+	return filepath.Join(GetCachePath(), "data.json")
 }
 
-func getTrashDir() string {
+func GetTrashDir() string {
 	return filepath.Join(GetCachePath(), "trash")
-}
-
-func GetTrashDirPath() string {
-	// TODO: may not need to get these values every time, could store them like homeDir.
-	year, month, _ := time.Now().UTC().Date()
-
-	return filepath.Join(getTrashDir(), fmt.Sprintf("%d", year), fmt.Sprintf("%d", month))
 }

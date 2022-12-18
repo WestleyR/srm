@@ -14,6 +14,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/c2h5oh/datasize"
 	"golang.org/x/sys/unix"
 )
 
@@ -45,6 +46,34 @@ func isPathADir(path string) bool {
 	}
 
 	return false
+}
+
+func getFileSize(path string) datasize.ByteSize {
+	fi, err := os.Stat(path)
+	if err != nil {
+		return datasize.ByteSize(0)
+	}
+
+	return datasize.ByteSize(fi.Size())
+}
+
+func getDirSize(path string) datasize.ByteSize {
+	var size datasize.ByteSize
+
+	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() {
+			size += datasize.ByteSize(info.Size())
+		}
+		return nil
+	})
+	if err != nil {
+		size = 0
+	}
+
+	return size
 }
 
 func checkIfFileIsWriteProtected(file string) bool {
