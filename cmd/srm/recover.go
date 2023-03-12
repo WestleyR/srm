@@ -20,11 +20,11 @@ import (
 
 // recoverCmd represents the recover command
 var recoverCmd = &cobra.Command{
-	Use:     "+s",
+	Use:     "+s [CACHE_INDEX]",
 	Aliases: []string{"+recover"},
 	Short:   "Recover a cached file by index.",
-	Long: `Recover a cached file by index. Only can recover by index
-only for the last 10 items, otherwise you need to manually cp by full path.`,
+	Long: `Recover a cached file by index from list. If no index is specified, instead will print
+the recent cache files. index 1 = latest removed file.`,
 	Args: cobra.ArbitraryArgs,
 
 	RunE: func(cmd *cobra.Command, args []string) error {

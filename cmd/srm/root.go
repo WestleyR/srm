@@ -24,9 +24,12 @@ var Version string = "[unknown]"
 var rootCmd = &cobra.Command{
 	Use:   "srm [flags] -- [./FILE...]",
 	Short: "Remove file(s) or directory(s) into cache, allows for undo/recover.",
-	Long: `Copyright (c) 2020-2022 WestleyR. All rights reserved.
+	Long: `Copyright (c) 2020-2023 WestleyR. All rights reserved.
 This software is licensed under the terms of The Clear BSD License.
-Source code: https://github.com/WestleyR/srm`,
+Source code: https://github.com/WestleyR/srm
+
+This cli and flags structor is experimental, if you have a suggestion please
+open a github issue at: github.com/WestleyR/srm`,
 
 	SilenceUsage: true,
 	Version:      Version,
