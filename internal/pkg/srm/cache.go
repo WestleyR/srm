@@ -13,103 +13,78 @@
 
 package srm
 
-import (
-	"fmt"
-	"io/ioutil"
-	"os"
-	"path/filepath"
-	"strconv"
-)
+// TODO: the following two functions are not used. This may be used later...
 
-const AutocleanSizeLimit = 15024 * 1024 // 15Mbs
-const AutocleanSizeLower = 100          // 100b
-
-// CleanCacheAUTO will remove all cached items above autocleanSizeLimit,
-// and below autocleanSizeLower.
-func CleanCacheAUTO(dryRun bool) error {
-	path := getCachePath()
-
-	cache, _ := getCacheArray(path)
-
-	var totalCleanedMbs float32
-
-	for _, c := range cache {
-		if c.size > AutocleanSizeLimit || c.size < AutocleanSizeLower {
-			if dryRun {
-				fmt.Printf("Would remove: %s -> %s\n", c.name, FormatBytesToStr(c.size))
-			} else {
-				fmt.Printf("Removing: %s (%s) ...\n", c.name, FormatBytesToStr(c.size))
-				err := os.RemoveAll(c.name)
-				if err != nil {
-					return fmt.Errorf("failed to autoclean: %s", err)
-				}
-			}
-			totalCleanedMbs += float32(c.size / 1000024)
-		}
-	}
-
-	spaceSavedFmt := "Would save %dMbs of space\n"
-	if !dryRun {
-		spaceSavedFmt = "Saved %dMbs of space\n"
-	}
-	fmt.Printf(spaceSavedFmt, int(totalCleanedMbs))
-
-	return nil
-}
-
-func doesFileExists(path string) bool {
-	_, err := os.Stat(path)
-	return !os.IsNotExist(err)
-}
-
-func getNextTrashIndex() (int32, error) {
-	cachePath := getCachePath()
-
-	cacheNumber := int32(0)
-
-	files, err := ioutil.ReadDir(cachePath)
-	if err != nil {
-		return 0, fmt.Errorf("failed to read dir: %s", err)
-	}
-	cacheNumber = int32(len(files))
-
-	// Give the extra one
-	cacheNumber++
-
-	fullPath := filepath.Join(cachePath, strconv.FormatInt(int64(cacheNumber), 10))
-
-	// Make sure it does not already exist, sometimes
-	// when one of the cache dirs is removed, it can
-	// screw up the last number. Only try 100 times
-	for true {
-		if doesFileExists(fullPath) {
-			// File already exists, then add incremt again...
-			cacheNumber++
-			fullPath = filepath.Join(cachePath, strconv.FormatInt(int64(cacheNumber), 10))
-		} else {
-			break
-		}
-	}
-
-	return cacheNumber, nil
-}
-
-func getSrmCacheDir() string {
-	home := os.Getenv("HOME")
-	return filepath.Join(home, ".cache/srm2")
-}
-
-func getCachePath() string {
-	home := getSrmCacheDir()
-
-	return filepath.Join(home, "trash")
-}
-
-func InitCache() {
-	cachePath := getCachePath()
-
-	err := os.MkdirAll(cachePath, 0700)
-	if err != nil {
-		fmt.Printf("ERROR: %v", err)
-	}
-}
+//func (m *Manager) loadDataCache() error {
+//	dc := &DataCache{}
+//
+//	b, err := os.ReadFile(m.dataCacheFile)
+//	if err != nil {
+//		// TODO: need to check os.IsNotExist
+//		return nil
+//	}
+//
+//	err = goini.Unmarshal(b, &dc)
+//	if err != nil {
+//		return err
+//	}
+//
+//	m.DataCache = dc
+//
+//	return nil
+//}
+//
+//func (m *Manager) Write(path string) error {
+//	b, err := goini.Marshal(m.DataCache)
+//	if err != nil {
+//		return fmt.Errorf("failed to marshal ini: %s", err)
+//	}
+//
+//	err = os.WriteFile(path, b, 0700)
+//	if err != nil {
+//		return fmt.Errorf("failed to write file: %s", err)
+//	}
+//
+//	return nil
+//}
+//
+//func getNextTrashIndex() (int32, error) {
+//	cachePath := paths.GetTrashDirPath()
+//
+//	cacheNumber := int32(0)
+//
+//	files, err := ioutil.ReadDir(cachePath)
+//	if err != nil && !errors.Is(err, os.ErrNotExist) {
+//		return 0, fmt.Errorf("failed to read dir: %s", err)
+//	}
+//	cacheNumber = int32(len(files))
+//
+//	// Give the extra one
+//	cacheNumber++
+//
+//	fullPath := filepath.Join(cachePath, strconv.FormatInt(int64(cacheNumber), 10))
+//
+//	// Make sure it does not already exist, sometimes
+//	// when one of the cache dirs is removed, it can
+//	// screw up the last number. Only try 100 times
+//	for true {
+//		if doesPathExist(fullPath) {
+//			// File already exists, then add incremt again...
+//			cacheNumber++
+//			fullPath = filepath.Join(cachePath, strconv.FormatInt(int64(cacheNumber), 10))
+//		} else {
+//			break
+//		}
+//	}
+//
+//	return cacheNumber, nil
+//}
+//
+//func InitCache() {
+//	cachePath := paths.GetTrashDirPath()
+//
+//	err := os.MkdirAll(cachePath, 0700)
+//	if err != nil {
+//		panic(fmt.Sprintf("failed to create dir: %s", err))
+//	}
+//}

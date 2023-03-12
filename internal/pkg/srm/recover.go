@@ -15,29 +15,18 @@ package srm
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strconv"
 )
 
-func RecoverFileFromTrashIndex(trashIndex int) error {
-	path := getCachePath()
+// Recover recovers a entry to the current working directory. index should
+// 1 = newest, 10 = 10 before the newest.
+func (m *Manager) Recover(index int) error {
+	entry := m.Data.Entries[len(m.Data.Entries)-index]
 
-	trashPath := filepath.Join(path, strconv.Itoa(trashIndex))
-	files, err := ioutil.ReadDir(trashPath)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-
-	if len(files) == 0 {
-		return fmt.Errorf("no files at index: %d", trashIndex)
-	}
-
-	fileName := files[0].Name()
-	fullTrashFile := filepath.Join(trashPath, fileName)
+	fileName := filepath.Base(entry.Path)
 
 	// Check to see if it already exists
 	// Only try 10 times
@@ -51,16 +40,18 @@ func RecoverFileFromTrashIndex(trashIndex int) error {
 		}
 	}
 
-	err = os.Rename(fullTrashFile, fileName)
+	err := os.Rename(entry.Path, fileName)
 	if err != nil {
-	    cmd := exec.Command("mv", fullTrashFile, fileName)
-	    err = cmd.Run()
-            if err != nil {
-                return fmt.Errorf("%s: failed to recover the current directory from %s", fileName, fullTrashFile)
-            }
+		cmd := exec.Command("mv", entry.Path, fileName)
+		err = cmd.Run()
+		if err != nil {
+			return fmt.Errorf("%s: failed to recover the current directory from %s", fileName, entry.Path)
+		}
 	}
 
-	fmt.Printf("File %s has been recovered to the current directory as: %s\n", files[0].Name(), fileName)
+	m.Data.Remove(len(m.Data.Entries) - index)
+
+	fmt.Printf("File %s has been recovered to the current directory as: %s\n", filepath.Base(entry.Path), fileName)
 
 	return nil
 }
