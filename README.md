@@ -12,7 +12,7 @@ compiled binary and the latest pre-release downloads.**
 If you have go installed, then you can run:
 
 ```
-go install github.com/WestleyR/srm/cmd/srm@latest
+go install github.com/WestleyR/srm@latest
 ```
 
 Or via clone:
