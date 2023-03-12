@@ -10,6 +10,7 @@
 package srm
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -20,7 +21,7 @@ import (
 
 func doesPathExist(path string) bool {
 	err := unix.Access(path, unix.F_OK)
-	if err != nil && !os.IsNotExist(err) {
+	if err != nil && errors.Is(err, os.ErrNotExist) {
 		return false
 	}
 

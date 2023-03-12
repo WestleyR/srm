@@ -14,17 +14,30 @@ var cleanCmd = &cobra.Command{
 	Short:   "Clean removed cached.",
 	Args:    cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		var err error
+		m, err := srm.New(nil)
+		if err != nil {
+			return err
+		}
+
 		switch strings.ToLower(args[0]) {
 		case "auto":
-			err = srm.CleanCacheAUTO(flagDryRun)
+			err = m.CleanCache(false, flagDryRun)
 		case "all":
-			err = fmt.Errorf("not ready")
+			err = m.CleanCache(true, flagDryRun)
 		default:
 			err = fmt.Errorf("Invalid option: %s", args[0])
 		}
+		if err != nil {
+			return fmt.Errorf("failed to clean cache: %w", err)
+		}
 
-		return err
+		// Only save the manager if theres no errors from modify it
+		err = m.Close()
+		if err != nil {
+			return fmt.Errorf("failed to save manager: %w", err)
+		}
+
+		return nil
 	},
 }
 

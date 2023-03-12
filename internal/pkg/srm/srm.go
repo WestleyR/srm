@@ -170,6 +170,8 @@ func (m *Manager) RM(path string) error {
 }
 
 // Remove removes the entry from cache dir
+// TODO: this should only be used for index 0, this function will be
+// replaced later.
 func (d *SrmData) Remove(index int) error {
 	//log.Printf("Removing entry: %s...", d.Entries[index].Path)
 

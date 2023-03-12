@@ -2,9 +2,9 @@
 
 # run-test <test-name> <test-command> <expect-to-contain-output> <expect-exit-code>
 
-run-test "srm flags" "./srm" "Usage of ./srm:" "" 1
-run-test "srm flags" "./srm -h" "Usage of ./srm:" "" 0
-run-test "srm flags" "./srm --help" "Usage of ./srm:" "" 0
+run-test "srm flags" "./srm" "Usage of srm:" "" 0
+run-test "srm flags" "./srm -h" "Available Commands:" "" 0
+run-test "srm flags" "./srm --help" "Available Commands:" "" 0
 run-test "srm flags" "./srm -V" "2" "" 0
 run-test "srm flags" "./srm --version" "2" "" 0
 
