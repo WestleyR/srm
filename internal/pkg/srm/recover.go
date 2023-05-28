@@ -32,7 +32,7 @@ func (m *Manager) Recover(index int) error {
 	// Only try 10 times
 	tmpName := fileName
 	for i := 1; i < 11; i++ {
-		if _, err := os.Stat(tmpName); err == nil {
+		if _, err := os.Lstat(tmpName); err == nil {
 			tmpName = fileName + "." + strconv.Itoa(i)
 		} else {
 			fileName = tmpName
