@@ -190,7 +190,7 @@ func sortByTime(cache []*Entry) {
 //
 //func getFileDate(path string) string {
 //	fileDate := ""
-//	finfo, err := os.Stat(path)
+//	finfo, err := os.Lstat(path)
 //	if err != nil {
 //		fileDate = "[unknown]"
 //		return fileDate

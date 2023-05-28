@@ -35,7 +35,7 @@ func doesPathExist(path string) bool {
 }
 
 func isPathADir(path string) bool {
-	fi, err := os.Stat(path)
+	fi, err := os.Lstat(path)
 	if err != nil {
 		return false
 	}
@@ -50,7 +50,7 @@ func isPathADir(path string) bool {
 }
 
 func getFileSize(path string) datasize.ByteSize {
-	fi, err := os.Stat(path)
+	fi, err := os.Lstat(path)
 	if err != nil {
 		return datasize.ByteSize(0)
 	}
