@@ -6,13 +6,10 @@ accidentally-removed files.
 
 ## Install
 
-**Please see the [release page](https://github.com/WestleyR/srm/releases) for the
-compiled binary and the latest pre-release downloads.**
-
 If you have go installed, then you can run:
 
 ```
-go install github.com/WestleyR/srm@latest
+GOPROXY=direct go install github.com/WestleyR/srm@latest
 ```
 
 Or via clone:
@@ -46,6 +43,10 @@ $ echo $PATH
 
 This way, `rm` will always run `srm`, even for other users. You can always run
 the normal `rm` by calling `/bin/rm ...`.
+
+## Disclaimer
+
+This is not designed to be a foolproof rm command, you still need to be careful.
 
 ## License
 
