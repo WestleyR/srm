@@ -9,7 +9,7 @@ accidentally-removed files.
 If you have go installed, then you can run:
 
 ```
-GOPROXY=direct go install github.com/WestleyR/srm@latest
+GOPROXY=direct go install github.com/WestleyR/srm@main
 ```
 
 Or via clone:
