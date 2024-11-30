@@ -102,6 +102,9 @@ func srmFile(file string, opts *Opts) error {
 
 	// Pre checks
 	if !doesPathExist(path) {
+		if opts.Force {
+			return nil
+		}
 		return fmt.Errorf("%s: does not exist", path)
 	}
 

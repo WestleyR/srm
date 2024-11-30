@@ -63,6 +63,8 @@ func getFileSize(path string) datasize.ByteSize {
 func getDirSize(path string) datasize.ByteSize {
 	var size datasize.ByteSize
 
+	// TODO: Maybe need to add the size of the dir itself
+
 	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err

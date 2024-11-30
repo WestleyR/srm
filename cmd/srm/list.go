@@ -12,6 +12,7 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -29,6 +30,8 @@ var listCmd = &cobra.Command{
 		return listTrash()
 	},
 }
+
+var stdWriter io.Writer = os.Stdout
 
 func listTrash() error {
 	home, err := os.UserHomeDir()
@@ -68,7 +71,7 @@ func listTrash() error {
 			continue
 		}
 
-		fmt.Printf("%d. %s (was %s) - %s\n", count, filepath.Join(strings.ReplaceAll(basePath, home, "~/"), "trash", filepath.Base(info.Were)), info.Were, info.Size.HR())
+		fmt.Fprintf(stdWriter, "%d. %s (was %s) - %s\n", count, filepath.Join(strings.ReplaceAll(basePath, home, "~/"), "trash", filepath.Base(info.Were)), info.Were, info.Size.HR())
 
 		count--
 	}
