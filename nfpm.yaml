@@ -1,0 +1,40 @@
+# This is an example nfpm configuration file.
+# Make sure to check the documentation at https://nfpm.goreleaser.com
+#
+# The lines below are called `modelines`. See `:help modeline`
+# Feel free to remove those if you don't want/need to use them.
+# yaml-language-server: $schema=https://nfpm.goreleaser.com/static/schema.json
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+
+name: "srm"
+arch: "amd64"
+platform: "linux"
+version: "1.0.0"
+release: 1
+section: "default"
+#priority: "extra"
+provides:
+  - srm
+maintainer: "Westley <westleyr@nym.hush.com>"
+description: |
+  Safe rm command with caching and backups.
+#vendor: "FooBarCorp"
+homepage: "https://github.com/WestleyR/srm"
+license: "BSD-3-Clause-Clear"
+#changelog: "changelog.yaml"
+contents:
+  - src: ./srm
+    dst: /usr/bin/srm
+  - src: /usr/bin/srm
+    dst: /usr/local/sbin/rm
+    type: symlink
+
+    #overrides:
+    #  rpm:
+    #    scripts:
+    #      preinstall: ./scripts/preinstall.sh
+    #      postremove: ./scripts/postremove.sh
+    #  deb:
+    #    scripts:
+    #      postinstall: ./scripts/postinstall.sh
+    #      preremove: ./scripts/preremove.sh
